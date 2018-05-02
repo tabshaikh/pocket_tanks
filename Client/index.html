@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">    
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>  
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>  
+  <link rel="stylesheet" href="/Client/styles.css">  
+  <title>Pocket Tanks Game</title>
+</head>
+<body>
+  
+  <div id="auth" class="login-page">
+    <div class="form">
+      <form id="register-form" class="register-form" style="display:none;">
+        <input id="register-username" type="username" placeholder="username"/>
+        <input id="register-email" type="email" placeholder="email address"/>
+        <input id="register-password" type="password" placeholder="password"/>
+        <button id="register">create</button>
+        <p class="message">Already registered? <a id="SignIn" href="#">Sign In</a></p>
+      </form>
+      <form id="login-form" class="login-form" >
+        <input id="login-email" type="email" placeholder="email address"/>
+        <input id="login-password" type="password" placeholder="password"/>
+        <button id="login" >login</button>
+        <p class="message">Not registered? <a id="create" href="#">Create an account</a></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="main-page" style="display:none;">
+      <div id="header" class="header">
+          <div><h4 id="UserName">Hi USER</h4></div>
+          <h1  id="logo">Pocket Tank</h1>
+          <button id="logOut">Log Out</button>          
+      </div>
+  
+      <div id="game" class="game" style="display:none;">
+        
+          <canvas id="ctx" class="canvas"></canvas>
+          <div class="chat">
+              <div id="chatHeader" class="chatHeader">
+                  <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
+                  <button id="voiceChat">V1</button>
+                  <button id="videoChat">V2</button>
+              </div>
+              <div id="chatBox" class="chatBox">
+                  <div id="chat1">Hi</div>
+                  <div id="chat2">Hey</div>
+              </div>
+              <div class="chatInput">
+                      <input id="chatInput" type="text" placeholder="Enter some Text"/>
+                      <button id="chatSubmit">send</button>
+              </div>
+          </div>
+      </div>
+  
+      <div id='options' class='options' style="display:block;">
+          <button id="single-player">Single-Player</button>
+          <button id="multi-player">Multi-Player</button>        
+      </div>
+    </div>  
+  
+</body>
+<script src="/Client/app.js"></script>
+</html>
+
+
+
+
+
