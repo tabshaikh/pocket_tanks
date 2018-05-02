@@ -10,7 +10,7 @@ app.get('/',function(req, res) {
 });
 app.use('/Client',express.static(path1 + '/Client'));
  
-serv.listen(8000);
+serv.listen(process.env.PORT || 8000);
 console.log("Server started.");
  
 var SOCKET_LIST = {};
