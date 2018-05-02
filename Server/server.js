@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
 
-var path = "/home/tab/Sem 4/Design Practices/Assignment 3/pocket_tanks/"
+var path = "/home/aakar/Pocket Tanks/"
 app.get('/',function(req, res) {
     res.sendFile(path + '/Client/index.html');
 });
