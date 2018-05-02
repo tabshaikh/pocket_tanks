@@ -110,9 +110,12 @@ var mainPage = document.getElementById('main-page');
             // Sign-out successful.
             authentication.style.display = 'block';
             mainPage.style.display = 'none';
+            options.style.display = 'block';
+            game.style.display = 'none';
+
+            socket.emit('signOutSuccess',player);            
             player.id = undefined;
             player.name = undefined;
-            socket.emit('signOutSuccess',player);
         })
         .catch(function(error) {
             // An error happened
@@ -144,10 +147,8 @@ var mainPage = document.getElementById('main-page');
         game.style.display = 'block';                
     });
 
-    // socket.on('newPositions',function(data){
-    //     ctx.clearRect(0,0,ctx.width,ctx.height);
-    //     var keys = Object.keys(data.player);
-    //     console.log(keys.length);
-    //     var len = keys.length
-    //     ctx.fillText("People Online :"+len,150,250);
-    // });
+    socket.on('newPositions',function(data){
+        // var keys = Object.keys(data.player);
+        console.log(data);
+        // var len = keys.length;
+    });
