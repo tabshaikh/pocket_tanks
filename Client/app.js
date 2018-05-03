@@ -7,10 +7,7 @@ var config = {
     messagingSenderId: "879042693506"
   };
   firebase.initializeApp(config);
-var player = {
-    id:undefined,
-    name:undefined
-};
+
 var socket = io();
 
 //authententication
@@ -96,7 +93,7 @@ var mainPage = document.getElementById('main-page');
         .then(function() {
                 auth.createUserWithEmailAndPassword(email,pass)
                 .then(function(user) {
-                console.log("Hi "+username);
+                console.log("Hi "+ username);
                 return user.updateProfile({
                     displayName: username,
                 });
@@ -139,16 +136,19 @@ var mainPage = document.getElementById('main-page');
 
     singlePlayer.addEventListener('click',e => {
         options.style.display = 'none';
-        game.style.display = 'block';                
+        game.style.display = 'block';
     });
 
     multiPlayer.addEventListener('click',e => {
         options.style.display = 'none';
-        game.style.display = 'block';                
+        game.style.display = 'block';
     });
 
-    socket.on('newPositions',function(data){
-        // var keys = Object.keys(data.player);
-        console.log(data);
-        // var len = keys.length;
-    });
+    function showPlayers()
+    {
+        var PLAYER_LIST;
+        socket.on('onlinePlayers',function(data){
+            PLAYERS_LIST = data.players;
+            delete PLAYERS_LIST(player.id);
+        });
+    }

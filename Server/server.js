@@ -19,7 +19,21 @@ var PLAYERS_LIST = {};
 PLAYERS_LIST.onConnect = function(data){
     var id = data.firebaseUser.uid;
     var name = data.firebaseUser.displayName;
-    var player ={"id":id,"name":name};
+    var player ={
+        "id" : id,
+        "name" : name,
+        "angle" : undefined,
+        "power" : undefined,
+        "tankX" : undefined,
+        "tankY" : undefined,
+        "control" : undefined,
+        "state" : undefined,
+        "round" : undefined,
+        "game_type" : undefined,
+        "status" : undefined,
+        "bulletX" : undefined,
+        "bulletY" : undefined
+    };
     console.log(player);
     PLAYERS_LIST[id]= player;
 }
@@ -56,6 +70,6 @@ setInterval(function(){
     }
     for(var i in SOCKET_LIST){
         var socket = SOCKET_LIST[i];
-        socket.emit('newPositions',pack);
+        socket.emit('onlinePlayers',pack);
     }
-},10000/25);
+},1000);

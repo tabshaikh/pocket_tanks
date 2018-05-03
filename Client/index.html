@@ -8,7 +8,39 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>  
   <script src="https://code.createjs.com/createjs-2013.05.14.min.js"></script>
-  
+  <script>
+        var player = {
+            "id" : undefined,
+            "name" : undefined,
+            "angle" : undefined,
+            "power" : undefined,
+            "tankX" : undefined,
+            "tankY" : undefined,
+            "control" : undefined,          // either left or right
+            "state" : undefined,            // either freeze or fire
+            "round" : undefined,
+            "game_type" : undefined,
+            "status" : undefined,           // denotes that if player is playing or not
+            "bulletX" : undefined,
+            "bulletY" : undefined
+        };
+
+        var otherPlayer = {
+            "id" : undefined,
+            "name" : undefined,
+            "angle" : undefined,
+            "power" : undefined,
+            "tankX" : undefined,
+            "tankY" : undefined,
+            "control" : undefined,
+            "state" : undefined,
+            "round" : undefined,
+            "game_type" : undefined,
+            "status" : undefined,
+            "bulletX" : undefined,
+            "bulletY" : undefined
+        };
+  </script>
   <link rel="stylesheet" href="/Client/styles.css"> 
   <link rel="stylesheet" href="/Client/canvas.css"> 
   <title>Pocket Tanks Game</title>
@@ -124,9 +156,10 @@
           <button id="multi-player">Multi-Player</button>        
       </div>
 
-      <!-- <div id="selectPlayer" class="selectPlayer" style="display:none;">
+      <div id="selectPlayer" class="selectPlayer" style="display:none;">
+          <div class="onlinePlayers"></div>
 
-      </div> -->
+      </div>
     </div>  
   
 </body>
