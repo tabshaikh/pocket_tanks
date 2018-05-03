@@ -150,6 +150,11 @@
   display: inline-block;
   box-shadow: 0px 0px 5px 5px #333333 ;
 }
+/* 
+#PocketCanvas {
+  height: 600;
+  width: 1055;
+} */
 
 .chat {
   margin: 12px;  

@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
 
-var path = "/home/aakar/Pocket\ Tanks"
+var path = "/home/tab/Sem 4/Design Practices/Assignment 3/pocket_tanks/"
 app.get('/',function(req, res) {
     res.sendFile(path + '/Client/index.html');
 });
@@ -48,12 +48,12 @@ io.sockets.on('connection', function(socket){
     });  
 });
  
-setInterval(function(){
-    var pack = {
-        player:PLAYERS_LIST,
-    }
-    for(var i in SOCKET_LIST){
-        var socket = SOCKET_LIST[i];
-        socket.emit('newPositions',pack);
-    }
-},1000/25);
+// setInterval(function(){
+//     var pack = {
+//         player:PLAYERS_LIST,
+//     }
+//     for(var i in SOCKET_LIST){
+//         var socket = SOCKET_LIST[i];
+//         socket.emit('newPositions',pack);
+//     }
+// },1000/25);

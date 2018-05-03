@@ -7,10 +7,13 @@
   <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>  
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.bundle.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/dojo/1.13.0/dojo/dojo.js"></script>  
-  <link rel="stylesheet" href="/Client/styles.css">  
+  <script src="https://code.createjs.com/createjs-2013.05.14.min.js"></script>
+  
+  <link rel="stylesheet" href="/Client/styles.css"> 
+  <link rel="stylesheet" href="/Client/canvas.css"> 
   <title>Pocket Tanks Game</title>
 </head>
-<body>
+<body onload="init();">
   
   <div id="auth" class="login-page">
     <div class="form">
@@ -39,7 +42,19 @@
   
       <div id="game" class="game" style="display:none;">
         
-          <canvas id="ctx" class="canvas"></canvas>
+          <div id="ctx" class="canvas">
+                <canvas id="PocketCanvas" width=1055 height=600 style="border: 1px solid black;">    
+                    </canvas>
+                    <p id="firepower" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:350;background-color:white"></p>
+                    <font color="white" style="z-index:2; position:absolute; top:535; left:1010">ANGLE</font>
+                    <input type="button" onclick="increase_speed()" style=" padding: 16px 32px;z-index:2; position:absolute; top:545; left:470" value=">"/>
+                    <input type="button" onclick="decrease_speed()" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:220" value="<"/>
+                    <p id="fireangle" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:1000;background-color:white"></p>
+                    <p style="z-index:2; position:absolute; top:545; left:470">ANGLE</p>
+                    <input type="button" onclick="increase_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1100" value=">"/>
+                    <input type="button" onclick="decrease_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:900" value="<"/>
+                    <button class="button button3" style="z-index:2; position:absolute; top:545; left:725" onclick="test()">FIRE</button> 
+          </div>
           <div class="chat">
               <div id="chatHeader" class="chatHeader">
                   <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
@@ -65,6 +80,7 @@
   
 </body>
 <script src="/Client/app.js"></script>
+<script src="/Client/game.js"></script>
 </html>
 
 

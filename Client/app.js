@@ -40,8 +40,8 @@ var mainPage = document.getElementById('main-page');
 
     //game
     var game = document.getElementById("game");
-    var ctx = document.getElementById("ctx").getContext("2d");
-    ctx.font = '30px Arial';
+    // var ctx = document.getElementById("ctx").getContext("2d");
+    // ctx.font = '30px Arial';
 
     //chat
     var chat = document.getElementById('chat');
@@ -144,10 +144,10 @@ var mainPage = document.getElementById('main-page');
         game.style.display = 'block';                
     });
 
-    socket.on('newPositions',function(data){
-        ctx.clearRect(0,0,ctx.width,ctx.height);
-        var keys = Object.keys(data.player);
-        console.log(keys.length);
-        var len = keys.length
-        ctx.fillText("People Online :"+len,150,250);
-    });
+    // socket.on('newPositions',function(data){
+    //     ctx.clearRect(0,0,ctx.width,ctx.height);
+    //     var keys = Object.keys(data.player);
+    //     console.log(keys.length);
+    //     var len = keys.length
+    //     ctx.fillText("People Online :"+len,150,250);
+    // });
