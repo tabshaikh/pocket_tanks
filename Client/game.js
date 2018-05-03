@@ -37,11 +37,6 @@
     tank2.onload = handletankLoad2;
     tank(2,rand1,terrain[rand1]-20);
 
-    var rect3 = new createjs.Shape();
-    rect3.graphics.beginFill('#000000');
-    rect3.graphics.drawRect(0,canvas.height - control_panel,canvas.width,control_panel);
-    rect3.graphics.endFill();
-    stage.addChild(rect3);
     console.log(tanks);
     this.document.onkeydown = keyPressed;
     createjs.Ticker.setFPS(60);
@@ -78,7 +73,7 @@
     //Initializing the features of the terrain
     var STEP_MAX = 2.0;
  	var STEP_CHANGE = .5;
- 	var HEIGHT_MAX = canvas.height - control_panel;
+ 	var HEIGHT_MAX = canvas.height ;
 
    	// starting conditions
    	var height = (Math.random() * HEIGHT_MAX);
