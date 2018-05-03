@@ -41,10 +41,8 @@
       </div>
   
       <div id="game" class="game" style="display:none;">
-        
-          <div id="ctx" class="canvas">
-                <canvas id="PocketCanvas" width=1055 height=600 style="border: 1px solid black;">    
-                    </canvas>
+                <canvas id="PocketCanvas" width=1055 height=600 style="border: 5px solid black;">    
+                </canvas>
                     <p id="firepower" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:350;background-color:white"></p>
                     <font color="white" style="z-index:2; position:absolute; top:535; left:1010">ANGLE</font>
                     <input type="button" onclick="increase_speed()" style=" padding: 16px 32px;z-index:2; position:absolute; top:545; left:470" value=">"/>
@@ -54,7 +52,7 @@
                     <input type="button" onclick="increase_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1100" value=">"/>
                     <input type="button" onclick="decrease_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:900" value="<"/>
                     <button class="button button3" style="z-index:2; position:absolute; top:545; left:725" onclick="test()">FIRE</button> 
-          </div>
+          
           <div class="chat">
               <div id="chatHeader" class="chatHeader">
                   <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
