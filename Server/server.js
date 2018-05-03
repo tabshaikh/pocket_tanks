@@ -1,14 +1,16 @@
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
+var path = require("path");
 
-var path = "/home/tab/Sem 4/Design Practices/Assignment 3/pocket_tanks/"
+var path1 = path.join(__dirname,"\..");
+console.log(path1);
 app.get('/',function(req, res) {
-    res.sendFile(path + '/Client/index.html');
+    res.sendFile(path1 + '/Client/index.html');
 });
-app.use('/Client',express.static(path + '/Client'));
+app.use('/Client',express.static(path1 + '/Client'));
  
-serv.listen(8000);
+serv.listen(process.env.PORT || 8000);
 console.log("Server started.");
  
 var SOCKET_LIST = {};
