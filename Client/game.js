@@ -74,7 +74,7 @@
             bitmap.x = rand ;
             bitmap.y = terrain[rand] ;
             var tank1_angle= (Math.atan((terrain[rand + 10]-terrain[rand])/10))*(180/Math.PI);
-            console.log("Tank angle:"+tank1_angle);
+           // console.log("Tank angle:"+tank1_angle);
             bitmap.rotation = tank1_angle;
             stage.addChild(bitmap);
             stage.update();
@@ -110,7 +110,7 @@
             bitmap.x = rand1 ;
             bitmap.y = terrain[rand1] ;
             var tank1_angle= (Math.atan((terrain[rand1 + 10]-terrain[rand1])/10))*(180/Math.PI);
-            console.log("Tank angle:"+tank1_angle);
+            //console.log("Tank angle:"+tank1_angle);
             bitmap.rotation = tank1_angle;
             stage.update();
         }
@@ -146,8 +146,8 @@
           height = 105;
           slope *= -1;
       }
-      console.log("x"+x);
-      console.log("terrain[x]"+height)
+     // console.log("x"+x);
+     // console.log("terrain[x]"+height)
       lineShape.graphics.beginLinearGradientFill(["#794c13","green"],[0.8,0.9],x,HEIGHT_MAX,x,height );
   	  lineShape.graphics.setStrokeStyle(10).beginLinearGradientStroke(["#794c13","green"],[0.7,0.9],x,HEIGHT_MAX,x,height).moveTo(x,HEIGHT_MAX).lineTo(x,height);
       terrain.push(height);
@@ -159,9 +159,9 @@
       	var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
       	var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);
       	var range = Math.pow(tanks[1].bullet_speed,2) * Math.sin(2 * tanks[1].bullet_angle * Math.PI / 180) / 9.8;
-      	console.log(time);
-       	console.log(height);
-      	console.log(range);
+      //	console.log(time);
+      // 	console.log(height);
+      //	console.log(range);
       	var canvas_height = tanks[1].y - height;
         createjs.Tween.get(circle).to({guide:{ path:[tanks[1].bullet_initial_coor_x,tanks[1].bullet_initial_coor_y, tanks[1].bullet_initial_coor_x,canvas_height,(tanks[1].x)+  (range)/2,canvas_height, (tanks[1].x)+(range),canvas_height,(tanks[1].x)+(range),terrain[Math.floor((tanks[1].x)+(range))]] }},time*200);
         stage.addChild(circle);
