@@ -1,0 +1,39 @@
+<script src="https://code.createjs.com/createjs-2013.05.14.min.js"></script>
+
+<input id="fit" type="checkbox"><label for="fit">Fit</label>
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<script>
+
+var stage = new createjs.Stage("canvas");
+
+var imageobj = new Image(),
+    image = new createjs.Bitmap(imageobj);
+    
+document.getElementById("fit").addEventListener("click", update);
+    
+imageobj.onload = update;
+function update() {
+
+		var fit = document.getElementById("fit").checked;
+    //var containerBounds = imageContainer.getTransformedBounds();
+
+		var w = stage.canvas.width, h = stage.canvas.height;
+
+    var xratio = w / imageobj.width,
+        yratio = h / imageobj.height,
+			  scale = fit ? Math.min(xratio, yratio) : Math.max(xratio, yratio);
+        
+    //var containerBounds = imageContainer.getTransformedBounds();
+    image.scaleX = image.scaleY = scale;
+    image.x = (w - imageobj.width*scale) / 2;
+    image.y = (h - imageobj.height*scale) / 2;  
+    
+    stage.addChild(image);
+    stage.update();
+};
+
+imageobj.crossOrigin = "Anonymous";
+
+imageobj.src = "/home/tab/Sem 4/Design Practices/Assignment 3/pocket_tanks/Client/img/tankVehicle.png";
+</script>
