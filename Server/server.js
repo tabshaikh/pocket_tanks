@@ -4,7 +4,6 @@ var serv = require('http').Server(app);
 var path = require("path");
 
 var path1 = path.join(__dirname,"\..");
-console.log(path1);
 app.get('/',function(req, res) {
     res.sendFile(path1 + '/Client/index.html');
 });
@@ -39,23 +38,24 @@ io.sockets.on('connection', function(socket){
 
     socket.on('signOutSuccess',function(data){
         delete SOCKET_LIST[data.id];
+        console.log("LogOut " + PLAYERS_LIST[data.id].name);        
         PLAYERS_LIST.onDisconnect(data);
-        console.log("LogOut");
     });
    
     socket.on('disconnect',function(){
         delete SOCKET_LIST[socket.id];
+        if(PLAYERS_LIST[socket.id] != undefined)
+            console.log("Disconnected " + PLAYERS_LIST[socket.id].name);        
         PLAYERS_LIST.onDisconnect(socket);
-        console.log("Disconnected");
     });  
 });
  
-// setInterval(function(){
-//     var pack = {
-//         player:PLAYERS_LIST,
-//     }
-//     for(var i in SOCKET_LIST){
-//         var socket = SOCKET_LIST[i];
-//         socket.emit('newPositions',pack);
-//     }
-// },1000/25);
+setInterval(function(){
+    var pack = {
+        player:PLAYERS_LIST,
+    }
+    for(var i in SOCKET_LIST){
+        var socket = SOCKET_LIST[i];
+        socket.emit('newPositions',pack);
+    }
+},10000/25);
