@@ -214,7 +214,8 @@ function increase_speed(){
     {
     firepower = firepower + 1;
     tanks[1].bullet_speed = tanks[1].bullet_speed + 1;
-    }
+    document.getElementById("firepower").innerHTML =firepower;
+}
     document.getElementById("firepower").innerHTML =firepower;
 }
 function decrease_angle(){

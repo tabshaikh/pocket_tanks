@@ -234,17 +234,16 @@
 
 .part22 {
   width: 23.5%;
-    height: 100%;
-  
+  height: 100%;
   display: inline-block;
-  margin: 0;
+  margin-left:  0;
   padding: 0;
 
 }
 
 .part23 {
   width: 25%;
-    height: 100%;
+  height: 100%;
   display: inline-block;
   margin: 0;
   padding: 0;
