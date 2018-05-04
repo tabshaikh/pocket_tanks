@@ -15,77 +15,142 @@
   <title>Pocket Tanks Game</title>
 </head>
 <body onload="init();">
-  
-    <div id="main-page" class="main-page" style="display:block;">
-        <div id="header" class="header">
-            <div><h4 id="UserName">Hi USER</h4></div>
-            <h1  id="logo">Pocket Tanks</h1>
-            <button id="logOut">Log Out</button>          
+
+    <!-- <div id="auth" class="login-page">
+        <div class="form">
+          <form id="register-form" class="register-form" style="display:none;">
+            <input id="register-username" type="username" placeholder="username"/>
+            <input id="register-email" type="email" placeholder="email address"/>
+            <input id="register-password" type="password" placeholder="password"/>
+            <button id="register">create</button>
+            <p class="message">Already registered? <a id="SignIn" href="#">Sign In</a></p>
+          </form>
+          <form id="login-form" class="login-form" >
+            <input id="login-email" type="email" placeholder="email address"/>
+            <input id="login-password" type="password" placeholder="password"/>
+            <button id="login" >login</button>
+            <p class="message">Not registered? <a id="create" href="#">Create an account</a></p>
+          </form>
         </div>
+      </div> -->
     
-        <div id="game" class="game" style="display:block;">     
-              <div id="PocketCanvas1" class="PocketCanvas1">                             
-                 <canvas id="PocketCanvas" class="PocketCanvas" width=1055 height=600 style="border: 1px solid black;">     
-                 </canvas>         
-  
-                  <div id="part2" class="part2">         
-                      <!-- <div id="partx" class="partx">
-                          <p style="z-index:2; position:absolute; top:545; left:470">POWER</p>
-                          <font color="white" style="z-index:2; position:absolute; top:535; left:1010">ANGLE</font>
-                      </div>
-                      <div id="party" class="party">
-                      <div id="part21" class="part21">
-                              <div id="part211" class="part211">
-                              <input type="button"  onclick="decrease_speed()" style=" align-items: center;padding: 16px 32px;z-index:2; position:absolute; top:545; left:220" value="<"/>
-                              </div>
-                          <div id="part212" class="part212">
-                          <p id="firepower" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:350;background-color:white"></p>
-                          </div>
-                          <div id="part213" class="part213">
-                          <input type="button" onclick="increase_speed()" style=" padding: 16px 32px;z-index:2; position:absolute; top:545; left:470" value=">"/>
-                          </div>
-                          
-                      </div>
-                      <div id="part22" class="part22">
-                          <button class="button button3" style="z-index:2; position:absolute; top:545; left:725;display: inline-block;" onclick="test()">FIRE</button> 
-                      </div>
-                      <div id="part23" class="part23">
-                          
-                          <p id="fireangle" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:1000;background-color:white"></p>     
-                          <input type="button" onclick="increase_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1100" value=">"/>
-                          <input type="button" onclick="decrease_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:900" value="<"/>
-                      </div>
-                      </div>-->
+      <div id="main-page" class="main-page" style="display:block;">
+          <div id="header" class="header">
+              <div><h4 id="UserName">Hi USER</h4></div>
+              <h1  id="logo">Pocket Tanks</h1>
+              <button id="logOut">Log Out</button>          
+          </div>
+      
+          <div id="game" class="game" style="display:none;">     
+                <div id="PocketCanvas1" class="PocketCanvas1">                             
+                   <canvas id="PocketCanvas" class="PocketCanvas">     
+                   </canvas>         
+    
+                    <div id="part2" class="part2">         
+                        <div id="partx" class="partx">
+                            <div id="x1" class="x1">
+                            <font color="white" style="z-index:2; position:absolute; left: 125px;">POWER</font>
+                            </div>
+                            <div id="x1" class="x1"></div>
+                            <div id="x1" class="x1">
+                            <font color="white" style="z-index:2; position:absolute; left: 820px;">ANGLE</font>
+                            </div>
+                            <div id="x1" class="x1">
+                                <font color="white" style="z-index:2; position:absolute; left: 1250px;">MOVE</font>
+                            </div>
+                        </div>
+                        <div id="party" class="party">
+                        <div id="part21" class="part21">
+                                <div id="part211" class="part211">
+                                <input type="button"  onclick="decrease_speed()" style="z-index:2; position:absolute;padding: 16px 32px; left: 20px;" value="<"/>
+                                </div>
+                            <div id="part212" class="part212">
+                            <p id="firepower" style="padding: 16px 32px;z-index:2; position: absolute;background-color:white; margin: 5"></p>
+                            </div>
+                            <div id="part213" class="part213">
+                            <input type="button" onclick="increase_speed()" style=" padding: 16px 32px;z-index:2; position:absolute; top:545; left:205px" value=">"/>
+                            </div>
+                            
+                        </div>
+                        <div id="part22" class="part22">
+                            <button class="button button3" onclick="fire()" style="z-index:2; position:absolute; top:545; left:450px;display: inline-block;" onclick="test()">FIRE</button> 
+                        </div>
+                        <div class="chat">
+                            <div id="chatHeader" class="chatHeader">
+                                <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
+                                <button id="voiceChat">V1</button>
+                                <button id="videoChat">V2</button>
+                            </div>
+                            <div id="chatBox" class="chatBox">
+                                <div id="chat1">Hi</div>
+                                <div id="chat2">Hey</div>
+                            </div>
+                            <div class="chatInput">
+                                    <input id="chatInput" type="text" placeholder="Enter some Text"/>
+                                    <button id="chatSubmit">send</button>
+                            </div>
+                        </div> <div id="part23" class="part23">
+                            <div id="part211" class="part211">
+                                <input type="button" onclick="decrease_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:710px" value="<"/>
+                            </div>
+                            <div id="part212" class="part212">
+                            <p id="fireangle" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:1000;background-color:white"></p>     
+                            </div>
+                            <div id="part213" class="part213">
+                            <input type="button" onclick="increase_angle()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:900px" value=">"/>
+                            </div>
+                            
+                        </div>
+                        <div id="part24" class="part24">
+                            <div id="part211" class="part211">
+                                <input type="button" onclick="decrease_movement()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1150px" value="<"/>
+                            </div>
+                            <div id="part212" class="part212">
+                            <p id="move" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:1240px;background-color:white"></p>     
+                            </div>
+                            <div id="part213" class="part213">
+                            <input type="button" onclick="decrease_movement()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1330px" value=">"/>
+                            </div>
+                            
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat">
+                  <div id="chatHeader" class="chatHeader">
+                      <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
+                      <button id="voiceChat">V1</button>
+                      <button id="videoChat">V2</button>
+                  </div>
+                  <div id="chatBox" class="chatBox">
+                      <div id="chat1">Hi</div>
+                      <div id="chat2">Hey</div>
+                  </div>
+                  <div class="chatInput">
+                          <input id="chatInput" type="text" placeholder="Enter some Text"/>
+                          <button id="chatSubmit">send</button>
                   </div>
               </div>
-              
-              <div class="chat">
-                <!-- <div id="chatHeader" class="chatHeader">
-                    <strong id="otherPlayerName" class="otherPlayerName">Anonymous</strong>
-                    <button id="voiceChat">V1</button>
-                    <button id="videoChat">V2</button>
-                </div>
-                <div id="chatBox" class="chatBox">
-                    <div id="chat1">Hi</div>
-                    <div id="chat2">Hey</div>
-                </div>
-                <div class="chatInput">
-                        <input id="chatInput" type="text" placeholder="Enter some Text"/>
-                        <button id="chatSubmit">send</button>
-                </div> -->
-              </div>
-        </div>
-    
-        <div id='options' class='options' style="display:none;">
-            <button id="single-player">Single-Player</button>
-            <button id="multi-player">Multi-Player</button>        
-        </div>
-  
-        <!-- <div id="selectPlayer" class="selectPlayer" style="display:none;">
-  
-        </div> -->
-      </div>  
-    
+          </div>
+      
+          <div id='options' class='options' style="display:none;">
+              <button id="single-player">Single-Player</button>
+              <button id="multi-player">Multi-Player</button>        
+          </div>
+          
+          <center>
+          <div id="selectPlayer" class="selectPlayer" style="display:block;">
+              <div class="onlinePlayers" >Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+              <div class="onlinePlayers">Tabish</div>
+          </div>
+        </center>
+        </div>      
   </body>
 <script src="app.js"></script>
 <script src="game.js"></script>

@@ -8,7 +8,7 @@ var config = {
   };
   firebase.initializeApp(config);
 
-var socket = io();
+var socket = io();   
 
 //authententication
 var authentication = document.getElementById('auth');
