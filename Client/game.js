@@ -1,5 +1,7 @@
 
   var canvas = document.getElementById("PocketCanvas"); //canvas variable initialized with id of pocketcanvas
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
   var stage = new createjs.Stage(canvas);
   var control_panel = 100;
 
