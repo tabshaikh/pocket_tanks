@@ -83,15 +83,15 @@ io.sockets.on('connection', function(socket){
     });
     
     socket.on('askConnection',function(data){
-        var socket1 = SOCKET_LIST[data.id];
-        socket1.emit('incommingConnection',PLAYERS_LIST[socket.id]);
+        var socket1 = SOCKET_LIST[data.data.id];
+        socket1.emit('incommingConnection',{"data":PLAYERS_LIST[socket.id],"terrain":data.terrain});
     });
     
     socket.on('approvedConnection',function(data){
         var socket1 = SOCKET_LIST[data.player1.id];
         socket1.emit('connectionEstablish',PLAYERS_LIST[socket.id]);
     });
-
+    
     socket.on('data_transfer', function(data){
         if(PLAYERS_LIST[socket.id] != undefined && PLAYERS_LIST[socket.id].otherPlayerId != undefined){
             var socket1 = SOCKET_LIST[PLAYERS_LIST[socket.id].otherPlayerId];

@@ -1,3 +1,4 @@
+
 var config = {
     apiKey: "AIzaSyATvQWRxZzGBPprB9wcdn4Fw_53tUIDaTE",
     authDomain: "pocket-tanks-dfb9e.firebaseapp.com",
@@ -153,7 +154,7 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
             }; 
             
             yourConn = new webkitRTCPeerConnection(configuration);
-
+            
             // yourConn.ondatachannel = function(event) {
             //     console.log('Data channel is created!');
             //     receiveChannel = event.channel;
@@ -176,7 +177,7 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
             
             //creating data channel 
             // dataChannel = yourConn.createDataChannel("channel1", {reliable:true}); 
-
+            
             // setup stream listening 
             yourConn.addStream(stream); 
             
@@ -251,13 +252,17 @@ function showPlayers()
         
         $('div.onlinePlayers').click(function() {
             var id = $(this).attr('id');
-            socket.emit('askConnection',data.player[id]);
+            generate_terrain();
+            socket.emit('askConnection',{"data":data.player[id],"terrain":terrain});
             socket.on('connectionEstablish',function(temp){
                 if(temp.id === id){
-                    selectPlayer.style.display = 'none';                
-                    game.style.display = "block";                   
+                    player.control = 0; //host 
+                    player.state = 1;                 
                     otherPlayer = data.player[id];
                     player2Name.innerHTML = otherPlayer.name;
+                    selectPlayer.style.display = 'none';                
+                    game.style.display = "block";
+                    init();
                     //////////////////////////////////
                     // create an offer 
                     yourConn.createOffer(function (offer) { 
@@ -277,14 +282,19 @@ function showPlayers()
 }
 
 socket.on('incommingConnection',function(data){
-    if(confirm(data.name + ' wants to play a game with you?'))
+    if(confirm(data.data.name + ' wants to play a game with you?'))
     {
+        terrain = data.terrain;
+        // console.log(terrain);
+        player.control = 1; //client
+        player.state = 0;
+        otherPlayer = data.data;
+        player2Name.innerHTML = otherPlayer.name;  
         selectPlayer.style.display = 'none';                
         game.style.display = "block";
-        otherPlayer = data;
-        player2Name.innerHTML = otherPlayer.name;        
+        init();      
         var gameObject = {
-            'player1': data,
+            'player1': data.data,
             'player2': player
         }
         socket.emit('approvedConnection',gameObject);
@@ -370,18 +380,18 @@ function handleCandidate(candidate) {
 chatSubmit.addEventListener("click", function (event) { 
     var val = chatInput.value; 
     chatBox.innerHTML += "<div id=\"chat2\">" + val + "</div>"; 
-     
+    
     //sending a message to a connected peer 
     obj = {
         "type": "chat",
         "value": val 
     };
     if(otherPlayer.id != undefined)
-        send_obj(obj);
+    send_obj(obj);
     else
-        console.log("kuch gadbad hai");
+    console.log("kuch gadbad hai");
     chatInput.value = "";
- });
+});
 
 function send_obj(obj){
     socket.emit('data_transfer',obj);
@@ -389,19 +399,64 @@ function send_obj(obj){
 
 socket.on('data_receive',function(data){
     if(data.type === "chat")
-        chatBox.innerHTML += "<div id=\"chat1\">" + data.value + "</div>";
+    chatBox.innerHTML += "<div id=\"chat1\">" + data.value + "</div>";
     else if(data.type === "swap"){
         otherPlayer = data.value;
+        if(otherPlayer.state == 0)
+        player.state = 1;
+        else 
+        player.state = 0;
     }
     else
-        console.log(data.value);
+    console.log(data.value);
 })
 
- setInterval(function(){
+setInterval(function(){
     var obj = {
         "type": "swap",
         "value": player
     };
     if(otherPlayer.id != undefined)
-        send_obj(obj);
-},1000);
+    send_obj(obj);
+},25);
+
+// Function used to generate the terrain randomly
+function generate_terrain()
+{
+    // var lineShape = new createjs.Shape();
+    
+    //Initializing the features of the terrain
+    var STEP_MAX = 2.0;
+    var STEP_CHANGE = .5;
+    var HEIGHT_MAX = canvas.height ;
+    
+    // starting conditions
+    var height = (Math.random() * HEIGHT_MAX);
+    var slope = (Math.random() * STEP_MAX) * 2 - STEP_MAX;
+    // creating the landscape
+    for (var x = 0; x < canvas.width; x++) 
+    {
+        // change height and slope
+        height += slope;
+        slope += (Math.random() * STEP_CHANGE) * 2 - STEP_CHANGE;
+        
+        // clip height and slope to maximum
+        if (slope > STEP_MAX) { slope = STEP_MAX };
+        if (slope < -STEP_MAX) { slope = -STEP_MAX };
+        
+        if (height > HEIGHT_MAX) { 
+            height = HEIGHT_MAX;
+            slope *= -1;
+        }
+        if (height < 0 || height > 0 && height < 100 ) { 
+            height = 105;
+            slope *= -1;
+        }
+        // console.log("x"+x);
+        // console.log("terrain[x]"+height)
+        // lineShape.graphics.beginLinearGradientFill(["#794c13","green"],[0.8,0.9],x,HEIGHT_MAX,x,height );
+        // lineShape.graphics.setStrokeStyle(10).beginLinearGradientStroke(["#794c13","green"],[0.7,0.9],x,HEIGHT_MAX,x,height).moveTo(x,HEIGHT_MAX).lineTo(x,height);
+        terrain.push(height);
+        // stage.addChild(lineShape);
+    }
+}
