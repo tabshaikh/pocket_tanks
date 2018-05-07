@@ -360,6 +360,7 @@ body,html {
   display: inline-block;
   margin-bottom: 2px;
   padding-top:25px;
+  cursor: pointer;  
   font-size: 20px;
   font-family: "Times New Roman", Times, serif;
   font-weight:bold; 
@@ -396,4 +397,14 @@ body,html {
   padding: 0;
   align-items: center;
   padding-left: 5px;
+
+.video { 
+  background: black; 
+  border: 1px solid gray;
+  position: absolute;
+  display: inline-block;
+  height: 150px;
+  width: 344px;
+  margin-left: 1525px;
+
 }
