@@ -7,7 +7,7 @@ var player = {
     "tankY" : undefined,
     "control" : 0,          // either left or right   0-left 1-right
     "state" : 1,            // either freeze or fire. 0 - freeze 1 - fire
-    "round" : 0,            // round number going on
+    "round" : undefined,            // round number going on
     "game_type" : undefined,        // Single player or multi player
     "status" : undefined,           // denotes that if player is playing or not
     "bulletX" : undefined,
@@ -49,16 +49,16 @@ var otherPlayer = {
     document.getElementById("move").innerHTML =movement;
 
     player.score = 0;
+    player.round = 0;
     document.getElementById("p1score").innerHTML ="Player 1: "+player.score;
     document.getElementById("roundno").innerHTML ="Round: "+player.round;
-    document.getElementById("p2score").innerHTML ="Player 2: "+otherPlayer.score;
 
     //The tanks size is 70*26
     var rand=Math.floor(Math.random()*(canvas.width/2)); //variable to randomly position tank 1 on the terrain
     var rand1=Math.floor(Math.random()*(canvas.width/2)+canvas.width/2); //variable to randomly position tank 2 on the terrain
 
     function init(){
-    generate_terrain();
+    document.getElementById("p2score").innerHTML ="Player 2: "+otherPlayer.score;
     if(player.control == 0) //draw a player to the left 
     {
         player.tankX = rand ; 
@@ -77,14 +77,24 @@ var otherPlayer = {
     }
     draw_tank1();
     draw_weapon_tank1();
+    draw_tank2();
+    draw_weapon_tank2();
     stage.update();
+    createjs.Ticker.addEventListener("tick", update_other_player_info);
+    createjs.Ticker.setFPS(60);
 }
+  
+  function update_other_player_info(){
+    draw_tank2();
+    draw_weapon_tank2();  
+    stage.update();
+  }
 
   var bitmap,image;
   var count = 25; // The number of points the tank will move forward or backward
   function draw_tank1(){
     var tank1 = new Image();
-    tank1.src = "./Client/img/tankVehicleleft.png";
+    tank1.src = "./Client/img/tankVehicleright.png";
     tank1.onload = handletankLoad1;
   }
   
@@ -132,6 +142,59 @@ var otherPlayer = {
         stage.update();
     }
 
+    var bitmap3,image3;
+    function draw_tank2(){
+    var tank2 = new Image();
+    tank2.src = "./Client/img/tankVehicleleft.png";
+    tank2.onload = handletankLoad2;
+  }
+  
+    var image4, bitmap4;
+    function draw_weapon_tank2(){
+        var turret2 = new Image();
+        turret2.src = "./Client/img/tankWeaponleft.png";
+        turret2.onload = handleweaponLoad2;
+    }
+    // Weapon size 35*7
+  function handleweaponLoad2(event) {
+      stage.removeChild(bitmap4);
+      image4 = event.target;
+      bitmap4 = new createjs.Bitmap(image4);
+      bitmap4.regY = 5;
+      bitmap4.regX = 0;
+      if(tank2_angle > 0)
+      {
+          bitmap4.x = otherPlayer.tankX + 20*Math.sin(tank2_angle*Math.PI / 180);
+          bitmap4.y = otherPlayer.tankY - 20*Math.cos(tank2_angle*Math.PI / 180);        
+      }
+      else
+      {
+          bitmap4.x = otherPlayer.tankX - 20*Math.sin(-tank2_angle*Math.PI / 180);
+          bitmap4.y = otherPlayer.tankY - 20*Math.cos(-tank2_angle*Math.PI / 180);
+      }
+      var turret_angle = - otherPlayer.angle ;
+      bitmap4.rotation = turret_angle;
+      stage.addChild(bitmap4);
+      stage.update();
+  }
+
+  var tank2_angle;
+
+  function handletankLoad2(event) {    
+    stage.removeChild(bitmap3);           
+    image3 = event.target;
+    bitmap3 = new createjs.Bitmap(image);
+    bitmap3.regX = 35;
+    bitmap3.regY = 25;
+    bitmap3.x = otherPlayer.tankX ;
+    bitmap3.y = otherPlayer.tankY ;
+    tank2_angle= (Math.atan((terrain[otherPlayer.tankX + 10]-terrain[otherPlayer.tankX])/10))*(180/Math.PI);
+    // console.log("Tank angle:"+tank1_angle);
+    bitmap3.rotation = tank2_angle;
+    stage.addChild(bitmap3);
+    stage.update();
+}
+
 function decrease_movement_forward(){
     if(player.state === 1)
     { 
@@ -168,6 +231,8 @@ function fire(){
     weapon.graphics.drawCircle(0,0,10);
     weapon.x = player.tankX;
     weapon.y = player.tankY - 2;
+    player.bulletX = weapon.x;
+    player.bulletY = weapon.y;
     weapon.graphics.endFill();
     xi = player.tankX;
     yi = player.tankY;
@@ -195,6 +260,8 @@ function fireweapon(event){
         t+=0.1;
         weapon.x = xi + player.power * 2 * (Math.cos(Math.PI*(player.angle)/180)) * t;
         weapon.y = yi - (player.power * 2 * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
+        player.bulletX = weapon.x;
+        player.bulletY = weapon.y;
     }
     else
     {
