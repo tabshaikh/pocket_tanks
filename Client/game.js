@@ -7,7 +7,6 @@
 
   var tanks={};
   var bulletList={};
-  var terrain = [];
   
   var firepower = 60;
   document.getElementById("firepower").innerHTML =firepower;
@@ -30,10 +29,8 @@
   {
     generate_terrain();
     
-    var tank1 = new Image();
-    tank1.src = "./Client/img/tankVehicleleft.png";
-    tank1.onload = handletankLoad1;	
     tank(1,rand,terrain[rand]);
+    draw_tank1();	
     
     var turret1 = new Image();
     turret1.src = "./Client/img/tankWeaponleft.png";
@@ -45,14 +42,8 @@
     tank(2,rand1,terrain[rand1]);
 
     var turret2 = new Image();
-    turret2.src = "./Client/img/tankWeaponright.png";
+    turret2.src = "./Client/img/tankWeaponleft.png";
     turret2.onload = handleweaponLoad2;
-
-    circle1 = new createjs.Shape();
-    circle1.graphics.beginFill("black");
-    circle1.graphics.drawCircle(rand,terrain[rand],5);
-    circle1.graphics.endFill();
-    stage.addChild(circle1);
 
     circle2 = new createjs.Shape();
     circle2.graphics.beginFill("black");
@@ -65,50 +56,68 @@
     createjs.Ticker.addEventListener("tick",tickHandler);
     stage.update();
   }
-    
-  function handletankLoad1(event) {
-            var image = event.target;
-            var bitmap = new createjs.Bitmap(image);
+  
+  var bitmap,image;
+  function draw_tank1(){
+    var tank1 = new Image();
+    tank1.src = "./Client/img/tankVehicleleft.png";
+    tank1.onload = handletankLoad1;
+  }
+  
+  function handletankLoad1(event) {    
+            stage.removeChild(bitmap);           
+            image = event.target;
+            bitmap = new createjs.Bitmap(image);
             bitmap.regX = 35;
-            bitmap.regY = 23;
-            bitmap.x = rand ;
-            bitmap.y = terrain[rand] ;
-            var tank1_angle= (Math.atan((terrain[rand + 10]-terrain[rand])/10))*(180/Math.PI);
+            bitmap.regY = 25;
+            bitmap.x = tanks[1].x ;
+            bitmap.y = tanks[1].y ;
+            var tank1_angle= (Math.atan((terrain[tanks[1].x + 10]-terrain[tanks[1].x])/10))*(180/Math.PI);
            // console.log("Tank angle:"+tank1_angle);
             bitmap.rotation = tank1_angle;
             stage.addChild(bitmap);
             stage.update();
         }
-  
+    // Weapon size 35*7
     function handleweaponLoad1(event) {
-            var image = event.target;
-            var bitmap = new createjs.Bitmap(image);
-            bitmap.regY = 23;
-            bitmap.x = rand + 35;
-            bitmap.y = terrain[rand];
-            var tank1_angle= (Math.atan((terrain[rand + 10]-terrain[rand])/10))*(180/Math.PI);
-            bitmap.rotation = tank1_angle;
-            stage.addChild(bitmap);
+            var image1 = event.target;
+            var bitmap1 = new createjs.Bitmap(image1);
+            bitmap1.regY = 5;
+            bitmap1.regx = 0;
+            bitmap1.x = rand - 20*Math.sin((Math.atan((terrain[rand + 10]-terrain[rand])/10))*(180/Math.PI)) ;
+            bitmap1.y = terrain[rand] - 20*Math.cos((Math.atan((terrain[rand + 10]-terrain[rand])/10))*(180/Math.PI)) ;
+            circle2 = new createjs.Shape();
+            circle2.graphics.beginFill("red");
+            circle2.graphics.drawCircle(rand,terrain[rand],2);
+            circle2.graphics.endFill();
+            stage.addChild(circle2);
+            var tank1_angle= - 60;
+            bitmap1.rotation = tank1_angle;
+            stage.addChild(bitmap1);
             stage.update();
         }
 
     function handleweaponLoad2(event) {
-        var image = event.target;
-        var bitmap = new createjs.Bitmap(image);
-        stage.addChild(bitmap);
-        bitmap.x = rand1;
-        bitmap.y = terrain[rand1] - 30;
+        var image2 = event.target;
+        var bitmap2 = new createjs.Bitmap(image2);     
+        bitmap2.regY = 5;
+        bitmap2.regx = 0;
+        bitmap2.x = rand1 - 5;
+        bitmap2.y = terrain[rand1]- 20;
+        var tank1_angle = -120;
+        bitmap2.rotation = tank1_angle;
+        stage.addChild(bitmap2);
         stage.update();
     }
 
   function handletankLoad2(event) {
-            var image = event.target;
-            var bitmap = new createjs.Bitmap(image);
-            bitmap.regX = 35;
-            bitmap.regY = 23;
-            stage.addChild(bitmap);
-            bitmap.x = rand1 ;
-            bitmap.y = terrain[rand1] ;
+            var image3 = event.target;
+            var bitmap3 = new createjs.Bitmap(image3);
+            bitmap3.regX = 35;
+            bitmap3.regY = 25;
+            stage.addChild(bitmap3);
+            bitmap3.x = rand1 ;
+            bitmap3.y = terrain[rand1] ;
             var tank1_angle= (Math.atan((terrain[rand1 + 10]-terrain[rand1])/10))*(180/Math.PI);
             //console.log("Tank angle:"+tank1_angle);
             bitmap.rotation = tank1_angle;
@@ -234,10 +243,36 @@ function increase_angle(){
     }
     document.getElementById("fireangle").innerHTML =fireangle;
 }
-function decrease_movement(){
+
+function decrease_movement_forward(){
+    var count = 20; // The number of points the tank will move forward or backward
     if(movement > 0)
     {
     movement = movement -1;
+    while(count != 0)
+    {
+        console.log("move");
+        tanks[1].x = tanks[1].x + 2;
+        tanks[1].y = terrain[tanks[1].x];
+        draw_tank1();
+        count = count - 2;
+    }    
+    }
+    document.getElementById("move").innerHTML =movement;
+}
+function decrease_movement_backward(){
+    var count = 20; // The number of points the tank will move forward or backward
+    if(movement > 0)
+    {
+    movement = movement -1;
+    while(count>0)
+    {
+        tanks[1].x = tanks[1].x - 2;
+        tanks[1].y = terrain[tanks[1].x];
+        draw_tank1();
+        stage.update();
+        count = cotunt - 2;
+    }
     }
     document.getElementById("move").innerHTML =movement;
 }

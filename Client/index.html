@@ -39,6 +39,7 @@
             "bulletX" : undefined,
             "bulletY" : undefined
         };
+        var terrain = [];
   </script>
   <link rel="stylesheet" href="/Client/styles.css"> 
   <link rel="stylesheet" href="/Client/canvas.css"> 
@@ -72,7 +73,18 @@
       </div>
   
       <div id="game" class="game" style="display:none;">     
-            <div id="PocketCanvas1" class="PocketCanvas1">                             
+            <div id="PocketCanvas1" class="PocketCanvas1">
+                <div id="score" class="score">
+                    <div id="player1" class="player1">
+                        <font color="white" id="p1score" style="z-index:2; position:absolute;"></font   >
+                    </div>
+                    <div id="round" class="round">
+                        <font color="white" id="roundno" style="z-index:2; position:absolute;"></font>
+                    </div>
+                    <div id="player2" class="player2">
+                        <font color="white" id="p2score" style="z-index:2; position:absolute;"></font>
+                    </div>
+                </div>                             
                <canvas id="PocketCanvas" class="PocketCanvas">     
                </canvas>         
 
@@ -119,13 +131,13 @@
                     </div>
                     <div id="part24" class="part24">
                         <div id="part211" class="part211">
-                            <input type="button" onclick="decrease_movement()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1150px" value="<"/>
+                            <input type="button" onclick="decrease_movement_backward()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1150px" value="<"/>
                         </div>
                         <div id="part212" class="part212">
                         <p id="move" style="padding: 16px 32px;z-index:2; position:absolute; top:545; left:1240px;background-color:white"></p>     
                         </div>
                         <div id="part213" class="part213">
-                        <input type="button" onclick="decrease_movement()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1330px" value=">"/>
+                        <input type="button" onclick="decrease_movement_forward()" style="padding: 16px 32px;z-index:2; position:absolute; top:562; left:1330px" value=">"/>
                         </div>
                         
                     </div>
@@ -166,5 +178,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-<script src="/Client/game.js"></script>
+<script src="/Client/gametemp.js"></script>
 </html>
