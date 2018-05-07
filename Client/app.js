@@ -257,6 +257,7 @@ function showPlayers()
                     selectPlayer.style.display = 'none';                
                     game.style.display = "block";                   
                     otherPlayer = data.player[id];
+                    player2Name.innerHTML = otherPlayer.name;
                     //////////////////////////////////
                     // create an offer 
                     yourConn.createOffer(function (offer) { 
@@ -281,6 +282,7 @@ socket.on('incommingConnection',function(data){
         selectPlayer.style.display = 'none';                
         game.style.display = "block";
         otherPlayer = data;
+        player2Name.innerHTML = otherPlayer.name;        
         var gameObject = {
             'player1': data,
             'player2': player
