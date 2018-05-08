@@ -283,8 +283,6 @@ function movetank1forward(event) {
             t=0;
             createjs.Ticker.addEventListener("tick", fireweapon);
             createjs.Ticker.setFPS(60);
-            // createjs.Ticker.addEventListener("tick", regenerate_terrain);
-            // createjs.Ticker.setFPS(60);
         }
         else if(round >= 10)
         {
@@ -311,11 +309,41 @@ function movetank1forward(event) {
             change = 1;
             createjs.Ticker.removeEventListener("tick", fireweapon);
             stage.removeChild(weapon);
+            remove_terrain();
             update_score();      
         }
         stage.update(event);
     }
     
+    function remove_terrain(){
+        createjs.Ticker.addEventListener("tick", regenerate_terrain);
+        createjs.Ticker.setFPS(60);
+    }
+
+    var ran=0;
+
+    function regenerate_terrain(){    
+            ran+=10;
+            for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
+            {
+                var y_cord;
+                y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
+                y_cord=(terrain[i])+y_cord;
+                if(terrain[i]<=y_cord)
+                terrain[i]=y_cord;
+            }
+            stage.removeChild(lineShape);
+            draw_terrain(); 
+            player.y = terrain[player.x]; 
+            //add tanks and turrets once again.
+            if(ran>=50)
+            {
+                ran=0;
+                createjs.Ticker.removeEventListener("tick", regenerate_terrain);
+            }
+            stage.update(event);
+    }
+
     function update_score(){
         console.log("otherPlayer.tankX: "+otherPlayer.tankX);
         console.log("weapon.x: "+weapon.x);
@@ -325,51 +353,9 @@ function movetank1forward(event) {
             document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
         }
     }
-    
-    function update_terrain(){
-        var x = Math.ceil(weapon.x);
-        console.log(x);
-        terrain[x-1] = terrain[x-1] + 1000;
-        terrain[x+1] = terrain[x+1] + 1000;
-        terrain[x-2] = terrain[x-2] + 2000;
-        terrain[x+2] = terrain[x+2] + 2000;
-        terrain[x-3] = terrain[x-3] + 3000;
-        terrain[x+3] = terrain[x+3] + 3000;
-        terrain[x-4] = terrain[x-4] + 4000;
-        terrain[x+4] = terrain[x+4] + 4000;
-        terrain[x-5] = terrain[x-5] + 5000;
-        terrain[x+5] = terrain[x+5] + 5000;
-        // terrain[x-6] = terrain[x-6] + 60;
-        // terrain[x+6] = terrain[x+6] + 60;
-        // terrain[x-7] = terrain[x-7] + 70;
-        // terrain[x+7] = terrain[x+7] + 70;
-        // terrain[x-8] = terrain[x-8] + 80;
-        // terrain[x+8] = terrain[x+8] + 80;
-        // terrain[x-9] = terrain[x-9] + 90;
-        // terrain[x+9] = terrain[x+9] + 90;
-        // terrain[x] = terrain[x] + 100;
-        console.log(terrain);
-    }
-    
-    function regenerate_terrain(){    
-        console.log("In regenerate terrain");
-        if( change == 1 )
-        {
-            
-            var promise = update_terrain();
-            
-            stage.removeChild(lineShape);
-            change = 0;
-            draw_terrain()
-            console.log("second");
-            
-        }
-        stage.update(event);
-    }
-    
+       
     function draw_terrain(){
         //stage.removeAllChildren();
-        stage.removeChild(lineShape);
         lineShape = new createjs.Shape();
         console.log("canvas width: "+canvas.width);
         for (var x = 0; x < canvas.width; x++) 
