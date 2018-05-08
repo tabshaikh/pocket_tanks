@@ -1,8 +1,8 @@
-var lineShape;
+var lineShape;  // used to draw_terrain
 
 var canvas = document.getElementById("PocketCanvas"); //canvas variable initialized with id of pocketcanvas
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
+canvas.height = window.innerHeight; //equating canvas height with windows height
+canvas.width = window.innerWidth;//  equating canvas width with windows width
 var stage = new createjs.Stage(canvas);
 var control_panel = 100;
 
@@ -24,7 +24,7 @@ document.getElementById("roundno").innerHTML ="Round: "+player.round;
 var rand=Math.floor(Math.random()*(canvas.width/2)); //variable to randomly position tank 1 on the terrain
 var rand1=Math.floor(Math.random()*(canvas.width/2)+canvas.width/2); //variable to randomly position tank 2 on the terrain
 
-function init1(){
+function init1(){       // function called when user select to play with other players
     //console.log("init called");
     draw_terrain();
     document.getElementById("p2score").innerHTML ="Player 2: " + otherPlayer.score;
@@ -53,7 +53,7 @@ function init1(){
     createjs.Ticker.setFPS(60);
 }
 
-function update_other_player_info(){
+function update_other_player_info(){    // update player info like tank postion and weapon position
     draw_tank1();
     draw_weapon_tank1();
     draw_tank2();
@@ -85,7 +85,7 @@ function update_tank2_bullet(){
 
 var bitmap,image;
 var count = 25; // The number of points the tank will move forward or backward
-function draw_tank1(){
+function draw_tank1(){      // used to draw left tank
     var tank1 = new Image();
     tank1.src = "./Client/img/tankVehicleright.png";
     tank1.onload = handletankLoad1;
@@ -288,7 +288,7 @@ function movetank1forward(event) {
     }
     
     var ran=0;
-    
+    // used to regenerate terrain if distorted
     function regenerate_terrain(){    
         ran+=55;
         //console.log(weapon.x);
@@ -326,7 +326,7 @@ function movetank1forward(event) {
         stage.removeChild(weapon);
         stage.update(event);
     }
-    
+    // update score when tank is hit by other player bullet
     function update_score(){
         //console.log("otherPlayer.tankX: "+otherPlayer.tankX);
         //console.log("weapon.x: "+weapon.x);
@@ -336,7 +336,7 @@ function movetank1forward(event) {
             document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
         }
     }
-    
+    // used to draw terrain
     function draw_terrain(){
         //stage.removeAllChildren();
         stage.removeChild(lineShape);
@@ -403,27 +403,20 @@ function movetank1forward(event) {
         function decrease_angle(){
             if(player.state === 1)
             {
-                    fireangle = fireangle -1;
-                    player.angle = player.angle - 1;
-                    draw_weapon_tank1();           
+                fireangle = fireangle -1;
+                player.angle = player.angle - 1;
+                draw_weapon_tank1();           
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }
         function increase_angle(){
             if(player.state === 1)
             {
-                    fireangle = fireangle + 1;
-                    player.angle = player.angle + 1;
-                    draw_weapon_tank1();
+                fireangle = fireangle + 1;
+                player.angle = player.angle + 1;
+                draw_weapon_tank1();
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
-        }
-        
-        function api(){
-            var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
-            var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);
-            var range = Math.pow(tanks[1].bullet_speed,2) * Math.sin(2 * tanks[1].bullet_angle * Math.PI / 180) / 9.8;
-            
         }
         
         

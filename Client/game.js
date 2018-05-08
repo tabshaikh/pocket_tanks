@@ -1,3 +1,5 @@
+/***************This file contains functions for controlling both single player and multiplayer events*******************/
+/****************************************************************************************************************/
 function decrease_speed2(){
     if(player.game_type === "single_player")
     {
