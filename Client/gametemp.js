@@ -248,6 +248,13 @@ function movetank1forward(event) {
         if(player.state == 1)
         {
             player.state = 0;
+            ///////////////////////////////////
+            var obj = {
+                "type": "swap",
+            };
+            if(otherPlayer.id != undefined)
+            send_obj(obj);
+            //////////////////////////////////
             console.log(player.state);
             player.round = player.round + 1;
             document.getElementById("roundno").innerHTML ="Round: "+player.round;
@@ -354,6 +361,7 @@ function movetank1forward(event) {
     
     function draw_terrain(){
         //stage.removeAllChildren();
+        stage.removeChild(lineShape);
         lineShape = new createjs.Shape();
         console.log("canvas width: "+canvas.width);
         for (var x = 0; x < canvas.width; x++) 
