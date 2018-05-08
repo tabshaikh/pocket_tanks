@@ -314,7 +314,7 @@ function showPlayers()      // called for mutiplayer mode only
                     disable();
                     mainPage.style.display = "block";             
                     game.style.display = "block";
-                    init();
+                    init1();
                     //////////////////////////////////
                     // create an offer 
                     yourConn.createOffer(function (offer) { 
@@ -352,7 +352,7 @@ socket.on('incommingConnection',function(data){
         disable();
         mainPage.style.display = "block";             
         game.style.display = "block";
-        init();      
+        init1();      
         var gameObject = {
             'player1': data.data,
             'player2': player
