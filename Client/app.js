@@ -1,4 +1,4 @@
-
+// firebase config details
 var config = {
     apiKey: "AIzaSyATvQWRxZzGBPprB9wcdn4Fw_53tUIDaTE",
     authDomain: "pocket-tanks-dfb9e.firebaseapp.com",
@@ -7,14 +7,14 @@ var config = {
     storageBucket: "",
     messagingSenderId: "879042693506"
 };
+// intilising firebase App
 firebase.initializeApp(config);
 var database = firebase.database();
 
-var socket = io(); 
-var yourConn; 
-var stream;
+var socket = io(); //initilising socket
+var yourConn; // for storing WebRTC connection
+var stream; // for video streamimg
 var dataChannel;
-var sendQueue = [];
 
 //authententication
 var authentication = document.getElementById('auth');
@@ -79,6 +79,7 @@ var multiPlayer = document.getElementById('multi-player');
 //selectPlayer
 var selectPlayer = document.getElementById('selectPlayer');
 
+// adding listners on various events
 SignIn.addEventListener('click',e => {
     registerForm.style.display = 'none';
     loginForm.style.display = 'inline-block';
@@ -96,7 +97,7 @@ login.addEventListener('click',e => {
     
     const auth = firebase.auth();
     // Sign in
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)      //logging via firebase
     .then(function() {
         auth.signInWithEmailAndPassword(email,pass)
         .catch(e => console.log(e.mesage));
@@ -111,7 +112,7 @@ register.addEventListener('click',e => {
     const auth = firebase.auth();
     
     // Sign in
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)      //singup via firebase
     .then(function() {
         auth.createUserWithEmailAndPassword(email,pass)
         .then(function(user) {
@@ -128,7 +129,7 @@ register.addEventListener('click',e => {
 });
 
 logOut.addEventListener('click',e => {
-    firebase.auth().signOut()
+    firebase.auth().signOut()               //firebase signout
     .then(function() {
         // Sign-out successful.
         disable();
@@ -144,7 +145,7 @@ logOut.addEventListener('click',e => {
     });
 });
 
-firebase.auth().onAuthStateChanged(firebaseUser => {
+firebase.auth().onAuthStateChanged(firebaseUser => {        //called when login or logout
     if(firebaseUser){
         disable();
         mainPage.style.display = 'block';
@@ -158,7 +159,7 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
         console.log('not logged in');
     }
 });
-
+// function for disabling all the elements of the html
 function disable(){
     gameover.style.display = 'none';
     options.style.display = 'none';
@@ -169,6 +170,7 @@ function disable(){
     mainPage.style.display = 'none';
 }
 
+// call for statistics
 statistics.addEventListener('click',e => {
     disable();
     mainPage.style.display = 'block';
@@ -184,6 +186,7 @@ statistics.addEventListener('click',e => {
     });    
 });
 
+/*******************Single player mode*******************************/
 singlePlayer.addEventListener('click',e => {
     disable();
     mainPage.style.display = 'block';

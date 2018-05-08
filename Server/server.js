@@ -1,14 +1,15 @@
+// requiring essential files
 var express = require('express');
 var app = express();
 var path = require("path");
 var fs = require('fs');
 var https = require('https');
 
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8000;        // taking port number as 8000
 
 var path1 = path.join(__dirname,"\..");
 app.get('/',function(req, res) {
-    res.sendFile(path1 + '/Client/index.html');
+    res.sendFile(path1 + '/Client/index.html');     // hosting the files
 });
 app.use('/Client',express.static(path1 + '/Client'));
 
@@ -17,7 +18,7 @@ const httpsOptions = {
     cert: fs.readFileSync(path1 + '/Server/security/localhost.cert'),
     requestCert: false,
     rejectUnauthorized: false
-}
+}// certificate for the files
 const server = https.createServer(httpsOptions,app);
 server.listen(port, () => {
     console.log('server running at ' + port)
@@ -48,7 +49,7 @@ PLAYERS_LIST.onDisconnect = function(data){
 }
 
 var io = require('socket.io')(server,{});
-io.sockets.on('connection', function(socket){
+io.sockets.on('connection', function(socket){       // socket listnening
     
     socket.on('signInSuccess',function(data){
         console.log("signInSuccess");
@@ -201,4 +202,4 @@ setInterval(function(){
         var socket = SOCKET_LIST[i];
         socket.emit('onlinePlayers',pack);
     }
-},1000);
+},1000);    // setting an interval for displaying all the users
