@@ -16,8 +16,8 @@
             "power" : undefined,
             "tankX" : undefined,
             "tankY" : undefined,
-            "control" : 0,          // either left or right   0-left 1-right
-            "state" : 1,            // either freeze or fire. 0 - freeze 1 - fire
+            "control" : undefined,          // either left or right   0-left 1-right
+            "state" : undefined,            // either freeze or fire. 0 - freeze 1 - fire
             "round" : undefined,            // round number going on
             "game_type" : undefined,        // Single player or multi player
             "status" : undefined,           // denotes that if player is playing or not
@@ -53,14 +53,14 @@
     
     <div id="auth" class="login-page">
         <div class="form">
-            <form id="register-form" class="register-form" style="display:none;">
+            <form id="register-form" class="register-form" style="display:none;" onsubmit="return false;">
                 <input id="register-username" type="username" placeholder="username"/>
                 <input id="register-email" type="email" placeholder="email address"/>
                 <input id="register-password" type="password" placeholder="password"/>
                 <button id="register">create</button>
                 <p class="message">Already registered? <a id="SignIn" href="#">Sign In</a></p>
             </form>
-            <form id="login-form" class="login-form" >
+            <form id="login-form" class="login-form" onsubmit="return false;">
                 <input id="login-email" type="email" placeholder="email address"/>
                 <input id="login-password" type="password" placeholder="password"/>
                 <button id="login" >login</button>
