@@ -251,7 +251,7 @@ function movetank1forward(event) {
         }
         else if(otherPlayer.round >= 10)
         {       
-            player.state = 0;~
+            player.state = 0;
             gameOver();
         }
     }

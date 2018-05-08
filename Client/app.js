@@ -195,6 +195,7 @@ singlePlayer.addEventListener('click',e => {
     voiceChat.style.display = 'none';
     chatInput.style.display = 'none';
     chatSubmit.style.display = 'none';
+    player.game_type = 'single_player';
     generate_terrain();
     init2();
 });
