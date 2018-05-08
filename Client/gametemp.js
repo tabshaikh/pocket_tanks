@@ -5,14 +5,14 @@ var player = {
     "power" : undefined,
     "tankX" : undefined,
     "tankY" : undefined,
-    "control" : 0,          // either left or right   0-left 1-right
-    "state" : 1,            // either freeze or fire. 0 - freeze 1 - fire
+    "control" : undefined,          // either left or right   0-left 1-right
+    "state" : undefined,            // either freeze or fire. 0 - freeze 1 - fire
     "round" : undefined,            // round number going on
     "game_type" : undefined,        // Single player or multi player
     "status" : undefined,           // denotes that if player is playing or not
     "bulletX" : undefined,
     "bulletY" : undefined,
-    "score"  : undefined,
+    "score"  : 0,
     "moves"  : undefined
 };
 var otherPlayer = {
@@ -29,7 +29,7 @@ var otherPlayer = {
     "status" : undefined,
     "bulletX" : undefined,
     "bulletY" : undefined,
-    "score"  : undefined,
+    "score"  : 0,
     "moves"  : undefined
 };
 var lineShape;
@@ -90,7 +90,26 @@ function init(){
 function update_other_player_info(){
     draw_tank2();
     draw_weapon_tank2();  
+    update_tank2_bullet();
     stage.update();
+}
+
+var tank2_bullet= new createjs.Shape();
+
+function update_tank2_bullet(){
+    if(otherPlayer.bulletY  <= terrain[Math.ceil(otherPlayer.bulletX)]){
+    stage.removeChild(tank2_bullet);
+    tank2_bullet.graphics.beginFill("red");
+    tank2_bullet.graphics.drawCircle(0,0,10);
+    tank2_bullet.x = otherPlayer.bulletX;
+    tank2_bullet.y = otherPlayer.bulletY - 2;
+    tank2_bullet.graphics.endFill();
+    stage.addChild(tank2_bullet);
+    stage.update();
+    }
+    else{
+        stage.removeChild(tank2_bullet);
+    }
 }
 
 var bitmap,image;
@@ -226,11 +245,23 @@ function movetank1forward(event) {
     var xi,yi;
     var t;
     function fire(){
-        if(player.state == 1 && player.round < 10 )
+        if(player.state == 1)
         {
+            player.state = 0;
+            console.log(player.state);
             player.round = player.round + 1;
             document.getElementById("roundno").innerHTML ="Round: "+player.round;
             weapon.graphics.beginFill("red");
+            weapon.graphics.drawCircle(0,0,10);
+            weapon.x = player.tankX;
+            weapon.y = player.tankY - 2;
+            player.bulletX = weapon.x;
+            player.bulletY = weapon.y;
+            weapon.graphics.endFill();
+            xi = player.tankX;
+            yi = player.tankY;
+            stage.addChild(weapon);
+            stage.update();weapon.graphics.beginFill("red");
             weapon.graphics.drawCircle(0,0,10);
             weapon.x = player.tankX;
             weapon.y = player.tankY - 2;
@@ -247,10 +278,6 @@ function movetank1forward(event) {
             // createjs.Ticker.addEventListener("tick", regenerate_terrain);
             // createjs.Ticker.setFPS(60);
         }
-        else if(player.round >= 10)
-        {
-            player.state = 0;
-        }
     }
     
     var orignalterrainy;
@@ -260,7 +287,7 @@ function movetank1forward(event) {
     function fireweapon(event){
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {   
-            t+=0.1;
+            t+=0.5;
             weapon.x = xi + player.power * 2 * (Math.cos(Math.PI*(player.angle)/180)) * t;
             weapon.y = yi - (player.power * 2 * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
             player.bulletX = weapon.x;
