@@ -403,24 +403,18 @@ function movetank1forward(event) {
         function decrease_angle(){
             if(player.state === 1)
             {
-                if(fireangle > 0)
-                {
                     fireangle = fireangle -1;
                     player.angle = player.angle - 1;
-                    draw_weapon_tank1();
-                }
+                    draw_weapon_tank1();           
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }
         function increase_angle(){
             if(player.state === 1)
             {
-                if(fireangle < 180)
-                {
                     fireangle = fireangle + 1;
                     player.angle = player.angle + 1;
                     draw_weapon_tank1();
-                }
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }

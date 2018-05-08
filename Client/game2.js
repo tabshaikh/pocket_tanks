@@ -52,7 +52,7 @@ function init2(){
     
     otherPlayer.tankX = rand1 ; 
     otherPlayer.tankY = terrain[rand1] ; 
-    other.angle = 120;
+    otherPlayer.angle = 120;
     
     draw_tank11();
     draw_weapon_tank11();
@@ -261,7 +261,10 @@ function movetank1forward1(event) {
             stage.addChild(weapon);
             stage.update();
             t=0;
-            //put cpu logic in it.
+            otherPlayer.angle = 120-Math.random()*20;
+            otherPlayer.power = Math.random() * 100;
+            createjs.Ticker.addEventListener("tick", fireweapon);
+            createjs.Ticker.setFPS(60);
         }
         else if(otherPlayer.round >= 10)
         {
@@ -275,8 +278,8 @@ function movetank1forward1(event) {
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {   
             t+=0.5;
-            weapon.x = xi + player.power * 2 * (Math.cos(Math.PI*(player.angle)/180)) * t;
-            weapon.y = yi - (player.power * 2 * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
+            weapon.x = xi + player.power * (Math.cos(Math.PI*(player.angle)/180)) * t;
+            weapon.y = yi - (player.power * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
             player.bulletX = weapon.x;
             player.bulletY = weapon.y;
         }
@@ -294,10 +297,10 @@ function movetank1forward1(event) {
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {      
             t+=0.5;
-            weapon.x = xi + player.power * 2 * (Math.cos(Math.PI*(player.angle)/180)) * t;
-            weapon.y = yi - (player.power * 2 * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
-            player.bulletX = weapon.x;
-            player.bulletY = weapon.y;
+            weapon.x = xi + otherPlayer.power * (Math.cos(Math.PI*(otherPlayer.angle)/180)) * t;
+            weapon.y = yi - (otherPlayer.power * (Math.sin(Math.PI*(otherPlayer.angle)/180)) * t) + (4.9 * Math.pow(t,2));
+            otherPlayer.bulletX = weapon.x;
+            otherPlayer.bulletY = weapon.y;
         }
         else
         {
@@ -349,6 +352,7 @@ function movetank1forward1(event) {
         {
             player.state = 0;
             otherPlayer.state = 1;
+            fire1();
         if(otherPlayer.tankX - 37 < weapon.x && weapon.x < otherPlayer.tankX + 37 )
         {
             player.score = player.score + 30;
@@ -417,26 +421,20 @@ function movetank1forward1(event) {
         function decrease_angle1(){
             if(player.state === 1)
             {
-                if(fireangle > 0)
-                {
                     fireangle = fireangle -1;
                     player.angle = player.angle - 1;
                     draw_weapon_tank11();
-                }
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }
         function increase_angle1(){
             if(player.state === 1)
             {
-                if(fireangle < 180)
-                {
                     fireangle = fireangle + 1;
                     player.angle = player.angle + 1;
                     draw_weapon_tank11();
                 }
                 document.getElementById("fireangle").innerHTML =fireangle;
-            }
         }
 
         function api(){
