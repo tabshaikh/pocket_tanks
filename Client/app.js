@@ -402,10 +402,15 @@ socket.on('data_receive',function(data){
     chatBox.innerHTML += "<div id=\"chat1\">" + data.value + "</div>";
     else if(data.type === "swap"){
         otherPlayer = data.value;
-        if(otherPlayer.state == 0)
-        player.state = 1;
-        else 
-        player.state = 0;
+        if(otherPlayer.state == 0 && player.state == 0){
+            player.state = 1;
+            console.log("State changed to fire");
+        }
+        else if(otherPlayer.state == 1 && player.state == 1)
+        { 
+            player.state = 0;
+            console.log("State changed to freeze");
+        };
     }
     else
     console.log(data.value);
