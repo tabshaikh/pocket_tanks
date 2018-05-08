@@ -91,6 +91,7 @@ function update_other_player_info(){
     draw_tank2();
     draw_weapon_tank2();  
     update_tank2_bullet();
+    document.getElementById("p2score").innerHTML ="Player 2: "+otherPlayer.score;
     stage.update();
 }
 
@@ -245,7 +246,7 @@ function movetank1forward(event) {
     var xi,yi;
     var t;
     function fire(){
-        if(player.state == 1)
+        if(player.state == 1 && player.round < 10)
         {
             player.state = 0;
             ///////////////////////////////////
@@ -257,7 +258,7 @@ function movetank1forward(event) {
             //////////////////////////////////
             console.log(player.state);
             player.round = player.round + 1;
-            document.getElementById("roundno").innerHTML ="Round: "+player.round;
+            document.getElementById("roundno").innerHTML ="Round: "+ player.round;
             weapon.graphics.beginFill("red");
             weapon.graphics.drawCircle(0,0,10);
             weapon.x = player.tankX;
@@ -284,6 +285,10 @@ function movetank1forward(event) {
             createjs.Ticker.setFPS(60);
             // createjs.Ticker.addEventListener("tick", regenerate_terrain);
             // createjs.Ticker.setFPS(60);
+        }
+        else if(round >= 10)
+        {
+            player.state = 0;
         }
     }
     
@@ -312,7 +317,9 @@ function movetank1forward(event) {
     }
     
     function update_score(){
-        if(otherPlayer.tankX - 37 < weapon.x < otherPlayer.tankX + 37 )
+        console.log("otherPlayer.tankX: "+otherPlayer.tankX);
+        console.log("weapon.x: "+weapon.x);
+        if(otherPlayer.tankX - 37 < weapon.x && weapon.x < otherPlayer.tankX + 37 )
         {
             player.score = player.score + 30;
             document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
