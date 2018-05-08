@@ -258,7 +258,13 @@ function showPlayers()
                 if(temp.id === id){
                     player.control = 0; //host 
                     player.state = 1;                 
-                    otherPlayer = data.player[id];
+                    otherPlayer.id = data.player[id].id;
+                    otherPlayer.name = data.player[id].name;
+                    otherPlayer.control = 1;
+                    otherPlayer.state = 0;
+                    otherPlayer.score = 0;
+                    otherPlayer.game_type = "multiplayer";
+                    otherPlayer.status = 1;
                     player2Name.innerHTML = otherPlayer.name;
                     selectPlayer.style.display = 'none';                
                     game.style.display = "block";
@@ -285,10 +291,17 @@ socket.on('incommingConnection',function(data){
     if(confirm(data.data.name + ' wants to play a game with you?'))
     {
         terrain = data.terrain;
-        // console.log(terrain);
+        console.log(terrain);
         player.control = 1; //client
         player.state = 0;
         otherPlayer = data.data;
+        otherPlayer.id = data.data.id;
+        otherPlayer.name = data.data.name;
+        otherPlayer.control = 0;
+        otherPlayer.state = 1;
+        otherPlayer.score = 0;
+        otherPlayer.game_type = "multiplayer";
+        otherPlayer.status = 1;
         player2Name.innerHTML = otherPlayer.name;  
         selectPlayer.style.display = 'none';                
         game.style.display = "block";
@@ -400,30 +413,40 @@ function send_obj(obj){
 socket.on('data_receive',function(data){
     if(data.type === "chat")
     chatBox.innerHTML += "<div id=\"chat1\">" + data.value + "</div>";
+    else if(data.type === "copy"){
+        otherPlayer.angle = data.value.angle;
+        otherPlayer.power = data.value.power;
+        otherPlayer.tankX = data.value.tankX; 
+        otherPlayer.tankY = data.value.tankY; 
+        otherPlayer.round = data.value.round; 
+        otherPlayer.bulletX = data.value.bulletX; 
+        otherPlayer.bulletY = data.value.bulletY; 
+        otherPlayer.score = data.value.score; 
+        otherPlayer.moves = data.value.moves;   
+        
+        // if(otherPlayer.state == 0){ // if other is freeze
+        //     player.state = 1; // then I will fire
+        //     console.log("State changed to fire");
+        // }
+    }
     else if(data.type === "swap"){
-        otherPlayer = data.value;
-        if(otherPlayer.state == 0 && player.state == 0){
-            player.state = 1;
-            console.log("State changed to fire");
-        }
-        else if(otherPlayer.state == 1 && player.state == 1)
-        { 
+        if(player.state == 1)
             player.state = 0;
-            console.log("State changed to freeze");
-        };
+        else
+            player.state = 1;
     }
     else
-    console.log(data.value);
+        console.log(data.value);
 })
 
 setInterval(function(){
     var obj = {
-        "type": "swap",
+        "type": "copy",
         "value": player
     };
     if(otherPlayer.id != undefined)
     send_obj(obj);
-},25);
+},30);
 
 // Function used to generate the terrain randomly
 function generate_terrain()
