@@ -25,7 +25,7 @@ var rand=Math.floor(Math.random()*(canvas.width/2)); //variable to randomly posi
 var rand1=Math.floor(Math.random()*(canvas.width/2)+canvas.width/2); //variable to randomly position tank 2 on the terrain
 
 function init2(){
-
+    
     player.control  = 0;
     player.state  = 1;
     player.round  = 0;
@@ -37,11 +37,11 @@ function init2(){
     otherPlayer.game_type  = "single_player";
     otherPlayer.score  = 0;
     otherPlayer.moves  = 4;
-
+    
     console.log("init2 called");
     
     draw_terrain();
-   
+    
     document.getElementById("p2score").innerHTML ="Player 2: " + otherPlayer.score;
     
     player.tankX = rand ; 
@@ -78,14 +78,14 @@ var tank2_bullet= new createjs.Shape();
 
 function update_tank2_bullet1(){
     if(otherPlayer.bulletY  <= terrain[Math.ceil(otherPlayer.bulletX)]){
-    stage.removeChild(tank2_bullet);
-    tank2_bullet.graphics.beginFill("red");
-    tank2_bullet.graphics.drawCircle(0,0,10);
-    tank2_bullet.x = otherPlayer.bulletX;
-    tank2_bullet.y = otherPlayer.bulletY - 2;
-    tank2_bullet.graphics.endFill();
-    stage.addChild(tank2_bullet);
-    stage.update();
+        stage.removeChild(tank2_bullet);
+        tank2_bullet.graphics.beginFill("red");
+        tank2_bullet.graphics.drawCircle(0,0,10);
+        tank2_bullet.x = otherPlayer.bulletX;
+        tank2_bullet.y = otherPlayer.bulletY - 2;
+        tank2_bullet.graphics.endFill();
+        stage.addChild(tank2_bullet);
+        stage.update();
     }
     else{
         stage.removeChild(tank2_bullet);
@@ -243,7 +243,7 @@ function movetank1forward1(event) {
             stage.addChild(weapon);
             stage.update();
             t=0;
-            createjs.Ticker.addEventListener("tick", fireweapon);
+            createjs.Ticker.addEventListener("tick", fireweapon_person);
             createjs.Ticker.setFPS(60);
         }
         else if(otherPlayer.state == 1 && otherPlayer.round < 10)
@@ -261,9 +261,9 @@ function movetank1forward1(event) {
             stage.addChild(weapon);
             stage.update();
             t=0;
-            otherPlayer.angle = 120-Math.random()*20;
+            otherPlayer.angle = 120 - Math.random()*20;
             otherPlayer.power = Math.random() * 100;
-            createjs.Ticker.addEventListener("tick", fireweapon);
+            createjs.Ticker.addEventListener("tick", fireweapon_computer);
             createjs.Ticker.setFPS(60);
         }
         else if(otherPlayer.round >= 10)
@@ -273,7 +273,7 @@ function movetank1forward1(event) {
             storeScore();
         }
     }
-        
+    
     function fireweapon_person(event){
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {   
@@ -292,7 +292,7 @@ function movetank1forward1(event) {
         }
         stage.update(event);
     }
-
+    
     function fireweapon_computer(event){
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {      
@@ -317,36 +317,36 @@ function movetank1forward1(event) {
         createjs.Ticker.addEventListener("tick", regenerate_terrain1);
         createjs.Ticker.setFPS(60);
     }
-
+    
     var ran=0;
-
+    
     function regenerate_terrain1(){    
-            ran+=55;
-            for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
-            {
-                var y_cord;
-                y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
-                y_cord=Math.ceil((terrain[Math.ceil(i)])+y_cord);
-                if(y_cord <= canvas.height)
-                terrain[Math.ceil(i)]=y_cord;
-            }
-            stage.removeChild(lineShape);
-            draw_terrain(); 
-            player.tankY = terrain[player.tankX]; 
-            otherPlayer.tankY = terrain[otherPlayer.tankX];
-            draw_tank11();
-            draw_weapon_tank11();
-            draw_tank21();
-            draw_weapon_tank21();
-            if(ran>=50)
-            {                
-                createjs.Ticker.removeEventListener("tick", regenerate_terrain1);
-                ran=0;
-            }
-            stage.update(event);
-            stage.removeChild(weapon);
+        ran+=55;
+        for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
+        {
+            var y_cord;
+            y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
+            y_cord=Math.ceil((terrain[Math.ceil(i)])+y_cord);
+            if(y_cord <= canvas.height)
+            terrain[Math.ceil(i)]=y_cord;
+        }
+        stage.removeChild(lineShape);
+        draw_terrain(); 
+        player.tankY = terrain[player.tankX]; 
+        otherPlayer.tankY = terrain[otherPlayer.tankX];
+        draw_tank11();
+        draw_weapon_tank11();
+        draw_tank21();
+        draw_weapon_tank21();
+        if(ran>=50)
+        {                
+            createjs.Ticker.removeEventListener("tick", regenerate_terrain1);
+            ran=0;
+        }
+        stage.update(event);
+        stage.removeChild(weapon);
     }
-
+    
     function update_score1(){
         if(player.state == 1)
         {
@@ -365,12 +365,12 @@ function movetank1forward1(event) {
             otherPlayer.state = 0;
             if(player.tankX - 37 < weapon.x && weapon.x < player.tankX + 37 )
             {
-            otherPlayer.score = otherPlayer.score + 30;
-            document.getElementById("p2score").innerHTML ="Player 2: " + otherPlayer.score;
+                otherPlayer.score = otherPlayer.score + 30;
+                document.getElementById("p2score").innerHTML ="Player 2: " + otherPlayer.score;
             }
         }
     }
-         
+    
     var count1 = 25; // The number of points the tank will move forward or backward
     function decrease_movement_backward1(){
         if(player.state === 1)
@@ -436,7 +436,7 @@ function movetank1forward1(event) {
                 }
                 document.getElementById("fireangle").innerHTML =fireangle;
         }
-
+        
         function api(){
             var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
             var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);

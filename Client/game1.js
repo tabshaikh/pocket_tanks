@@ -68,14 +68,14 @@ var tank2_bullet= new createjs.Shape();
 
 function update_tank2_bullet(){
     if(otherPlayer.bulletY  <= terrain[Math.ceil(otherPlayer.bulletX)]){
-    stage.removeChild(tank2_bullet);
-    tank2_bullet.graphics.beginFill("red");
-    tank2_bullet.graphics.drawCircle(0,0,10);
-    tank2_bullet.x = otherPlayer.bulletX;
-    tank2_bullet.y = otherPlayer.bulletY - 2;
-    tank2_bullet.graphics.endFill();
-    stage.addChild(tank2_bullet);
-    stage.update();
+        stage.removeChild(tank2_bullet);
+        tank2_bullet.graphics.beginFill("red");
+        tank2_bullet.graphics.drawCircle(0,0,10);
+        tank2_bullet.x = otherPlayer.bulletX;
+        tank2_bullet.y = otherPlayer.bulletY - 2;
+        tank2_bullet.graphics.endFill();
+        stage.addChild(tank2_bullet);
+        stage.update();
     }
     else{
         stage.removeChild(tank2_bullet);
@@ -251,8 +251,8 @@ function movetank1forward(event) {
         }
         else if(otherPlayer.round >= 10)
         {       
-                player.state = 0;~
-                gameOver();
+            player.state = 0;~
+            gameOver();
         }
     }
     
@@ -286,47 +286,47 @@ function movetank1forward(event) {
         createjs.Ticker.addEventListener("tick", regenerate_terrain);
         createjs.Ticker.setFPS(60);
     }
-
+    
     var ran=0;
-
+    
     function regenerate_terrain(){    
-            ran+=55;
-            //console.log(weapon.x);
-            for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
-            {
-                var y_cord;
-                y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
-                y_cord=Math.ceil((terrain[Math.ceil(i)])+y_cord);
-                if(y_cord <= canvas.height)
-                terrain[Math.ceil(i)]=y_cord;
-            }
-            stage.removeChild(lineShape);
-            draw_terrain(); 
-            player.tankY = terrain[player.tankX]; 
-            otherPlayer.tankY = terrain[otherPlayer.tankX];
-            // console.log("tank 2 y changed"+ otherPlayer.tankY);
-            /////////////////////////////////////////// 
-            var obj = {
-                "type":"terrainDestroyed",
-                "terrain": terrain,
-                "playerY": otherPlayer.tankY
-            }
-            send_obj(obj);
-            //////////////////////////////////////
-            draw_tank1();
-            draw_weapon_tank1();
-            draw_tank2();
-            draw_weapon_tank2();
-            if(ran>=50)
-            {                
-                createjs.Ticker.removeEventListener("tick", regenerate_terrain);
-                ran=0;
-            }
-            
-            stage.removeChild(weapon);
-            stage.update(event);
+        ran+=55;
+        //console.log(weapon.x);
+        for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
+        {
+            var y_cord;
+            y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
+            y_cord=Math.ceil((terrain[Math.ceil(i)])+y_cord);
+            if(y_cord <= canvas.height)
+            terrain[Math.ceil(i)]=y_cord;
+        }
+        stage.removeChild(lineShape);
+        draw_terrain(); 
+        player.tankY = terrain[player.tankX]; 
+        otherPlayer.tankY = terrain[otherPlayer.tankX];
+        // console.log("tank 2 y changed"+ otherPlayer.tankY);
+        /////////////////////////////////////////// 
+        var obj = {
+            "type":"terrainDestroyed",
+            "terrain": terrain,
+            "playerY": otherPlayer.tankY
+        }
+        send_obj(obj);
+        //////////////////////////////////////
+        draw_tank1();
+        draw_weapon_tank1();
+        draw_tank2();
+        draw_weapon_tank2();
+        if(ran>=50)
+        {                
+            createjs.Ticker.removeEventListener("tick", regenerate_terrain);
+            ran=0;
+        }
+        
+        stage.removeChild(weapon);
+        stage.update(event);
     }
-
+    
     function update_score(){
         //console.log("otherPlayer.tankX: "+otherPlayer.tankX);
         //console.log("weapon.x: "+weapon.x);
@@ -336,7 +336,7 @@ function movetank1forward(event) {
             document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
         }
     }
-       
+    
     function draw_terrain(){
         //stage.removeAllChildren();
         stage.removeChild(lineShape);
@@ -418,7 +418,7 @@ function movetank1forward(event) {
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }
-
+        
         function api(){
             var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
             var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);

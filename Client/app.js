@@ -116,8 +116,8 @@ register.addEventListener('click',e => {
         auth.createUserWithEmailAndPassword(email,pass)
         .then(function(user) {
             firebase.database().ref('users/' + user.uid).set({
-                "total": 1,
-                "gameWon": 1,
+                "total": 0,
+                "gameWon": 0,
                 "gameLost" : 0
             });
             return user.updateProfile({
@@ -188,6 +188,12 @@ singlePlayer.addEventListener('click',e => {
     disable();
     mainPage.style.display = 'block';
     game.style.display = 'block';
+    videoChat.style.display = 'none';
+    voiceChat.style.display = 'none';
+    chatInput.style.display = 'none';
+    chatSubmit.style.display = 'none';
+    generate_terrain();
+    init2();
 });
 /********************************************************************************/
 /***************************** Multi Mode Start *********************************/
