@@ -73,10 +73,23 @@
         <div id="header" class="header">
             <div><h4 id="UserName">Hi USER</h4></div>
             <h1  id="logo">Pocket Tanks</h1>
-            <button id="logOut">Log Out</button>          
+            <button id="logOut">Log Out</button>  
+            <button id="statistics">Statistics</button>                    
         </div>
         
-        <video id = "remoteVideo" class="video" style="display:none;" autoplay></video>      
+        <video id = "remoteVideo" class="video" style="display:none;" autoplay></video>  
+        
+        <div id="statisticsPage" class="headings" style="display:none;">
+            <h1>STATISTICS</h1><br>
+            <h2 id="totalGamesPlayed">0</h2>
+            <h2 id="gameWon">0</h2>
+            <h2 id="gameLost">0</h2>
+        </div>
+        
+        <div id="gameOver" class="headings" style="display:none;">
+            <h1>GAME OVER</h1>
+            <h2 id="gameOverResult"></h2>
+        </div>
         
         <div id="game" class="game" style="display:none;">     
             <div id="PocketCanvas1" class="PocketCanvas1">

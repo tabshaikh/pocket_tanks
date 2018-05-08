@@ -8,6 +8,7 @@ var config = {
     messagingSenderId: "879042693506"
 };
 firebase.initializeApp(config);
+var database = firebase.database();
 
 var socket = io(); 
 var yourConn; 
@@ -17,7 +18,6 @@ var sendQueue = [];
 
 //authententication
 var authentication = document.getElementById('auth');
-
 //register
 var registerForm = document.getElementById('register-form');
 var registerUsername = document.getElementById('register-username');
@@ -38,13 +38,27 @@ var mainPage = document.getElementById('main-page');
 //header
 var header = document.getElementById('header');
 var userName = document.getElementById('UserName');
+var statistics = document.getElementById('statistics');
 var logOut = document.getElementById('logOut');
 //video
 var remoteVideo = document.getElementById('remoteVideo');
+
+//statistics
+var statisticsPage =  document.getElementById('statisticsPage');
+var totalGamesPlayed =  document.getElementById('totalGamesPlayed');
+var gameWon =  document.getElementById('gameWon');
+var gameLost =  document.getElementById('gameLost');
+
+//gameOver
+var gameover = document.getElementById("gameOver");
+var gameOverResult = document.getElementById("gameOverResult");
+
 //game
 var game = document.getElementById("game");
-// var ctx = document.getElementById("ctx").getContext("2d");
-// ctx.font = '30px Arial';
+//game Area
+var score = document.getElementById("score");
+var canvas = document.getElementById("PocketCanvas");
+var gameControl = document.getElementById("part2");
 
 //chat
 var chat = document.getElementById('chat');
@@ -101,7 +115,11 @@ register.addEventListener('click',e => {
     .then(function() {
         auth.createUserWithEmailAndPassword(email,pass)
         .then(function(user) {
-            console.log("Hi "+ username);
+            firebase.database().ref('users/' + user.uid).set({
+                "total": 1,
+                "gameWon": 1,
+                "gameLost" : 0
+            });
             return user.updateProfile({
                 displayName: username,
             });
@@ -113,10 +131,8 @@ logOut.addEventListener('click',e => {
     firebase.auth().signOut()
     .then(function() {
         // Sign-out successful.
+        disable();
         authentication.style.display = 'block';
-        mainPage.style.display = 'none';
-        options.style.display = 'block';
-        game.style.display = 'none';
         
         socket.emit('signOutSuccess',player);            
         player.id = undefined;
@@ -130,91 +146,120 @@ logOut.addEventListener('click',e => {
 
 firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser){
-        authentication.style.display = 'none';
+        disable();
         mainPage.style.display = 'block';
+        options.style.display = 'block';
         player.id = firebaseUser.uid;
         player.name = firebaseUser.displayName;
         userName.innerHTML = "Hi " + player.name;
-        socket.emit('signInSuccess',{firebaseUser});
-        ////////////////////////////////////////////////
-        //********************** 
-        //Starting a peer connection 
-        //********************** 
-        
-        //getting local video stream 
-        navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) { 
-            stream = myStream; 
-            
-            //displaying local video stream on the page 
-            // localVideo.srcObject = (stream);
-            
-            //using Google public stun server 
-            var configuration = { 
-                "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
-            }; 
-            
-            yourConn = new webkitRTCPeerConnection(configuration);
-            
-            // yourConn.ondatachannel = function(event) {
-            //     console.log('Data channel is created!');
-            //     receiveChannel = event.channel;
-            //     receiveChannel.onopen = function() {
-            //       console.log('Data channel is open and ready to be used.');
-            //     };
-            //     receiveChannel.onerror = function (error) { 
-            //         console.log("Ooops...error:", error); 
-            //     }; 
-            //     receiveChannel.onmessage = function (event) {
-            //         if(event.data.type === "chat")
-            //             chatBox.innerHTML += "<div id=\"chat1\">" + event.data.value + "</div>";
-            //         else
-            //             console.log(event.data.value);
-            //     }; 
-            //     receiveChannel.onclose = function () { 
-            //         console.log("data channel is closed"); 
-            //     };
-            //   };
-            
-            //creating data channel 
-            // dataChannel = yourConn.createDataChannel("channel1", {reliable:true}); 
-            
-            // setup stream listening 
-            yourConn.addStream(stream); 
-            
-            //when a remote user adds stream to the peer connection, we display it 
-            yourConn.onaddstream = function (e) { 
-                remoteVideo.srcObject = (e.stream); 
-            };
-            
-            // Setup ice handling 
-            yourConn.onicecandidate = function (event) { 
-                if (event.candidate) { 
-                    send({ 
-                        type: "candidate", 
-                        candidate: event.candidate 
-                    }); 
-                } 
-            };  
-            
-        }, function (error) { 
-            console.log(error); 
-        });
-        /////////////////////////////////////////////////
-        
+        socket.emit('signInSuccess',{firebaseUser});       
     }
     else {
         console.log('not logged in');
     }
 });
 
-singlePlayer.addEventListener('click',e => {
+function disable(){
+    gameover.style.display = 'none';
     options.style.display = 'none';
-    game.style.display = 'block';
+    authentication.style.display = 'none';
+    game.style.display = 'none';
+    remoteVideo.style.display = 'none';
+    selectPlayer.style.display = 'none';
+    mainPage.style.display = 'none';
+}
+
+statistics.addEventListener('click',e => {
+    disable();
+    mainPage.style.display = 'block';
+    statisticsPage.style.display = 'block';
+    var wonCount, lostCount, totalCount;
+    firebase.database().ref('users/' + player.id).once('value').then(function(snapshot) {
+        wonCount = snapshot.val().gameWon;
+        lostCount = snapshot.val().gameLost;
+        totalCount = snapshot.val().total;
+        totalGamesPlayed.innerHTML = "Total Games Played:-" + (totalCount);
+        gameWon.innerHTML = "Games Won:-" + (wonCount);
+        gameLost.innerHTML = "Games Lost:-" + (lostCount);
+    });    
 });
 
+singlePlayer.addEventListener('click',e => {
+    disable();
+    mainPage.style.display = 'block';
+    game.style.display = 'block';
+});
+/********************************************************************************/
+/***************************** Multi Mode Start *********************************/
+/********************************************************************************/
 multiPlayer.addEventListener('click',e => {
-    options.style.display = 'none';
+    disable();
+    mainPage.style.display = 'block';
     selectPlayer.style.display = 'block';
+    ////////////////////////////////////////////////
+    //********************** 
+    //Starting a peer connection 
+    //********************** 
+    
+    //getting local video stream 
+    navigator.webkitGetUserMedia({ video: true, audio: true }, function (myStream) { 
+        stream = myStream; 
+        
+        //displaying local video stream on the page 
+        // localVideo.srcObject = (stream);
+        
+        //using Google public stun server 
+        var configuration = { 
+            "iceServers": [{ "url": "stun:stun2.1.google.com:19302" }]
+        }; 
+        
+        yourConn = new webkitRTCPeerConnection(configuration);
+        
+        // yourConn.ondatachannel = function(event) {
+        //     console.log('Data channel is created!');
+        //     receiveChannel = event.channel;
+        //     receiveChannel.onopen = function() {
+        //       console.log('Data channel is open and ready to be used.');
+        //     };
+        //     receiveChannel.onerror = function (error) { 
+        //         console.log("Ooops...error:", error); 
+        //     }; 
+        //     receiveChannel.onmessage = function (event) {
+        //         if(event.data.type === "chat")
+        //             chatBox.innerHTML += "<div id=\"chat1\">" + event.data.value + "</div>";
+        //         else
+        //             console.log(event.data.value);
+        //     }; 
+        //     receiveChannel.onclose = function () { 
+        //         console.log("data channel is closed"); 
+        //     };
+        //   };
+        
+        //creating data channel 
+        // dataChannel = yourConn.createDataChannel("channel1", {reliable:true}); 
+        
+        // setup stream listening 
+        yourConn.addStream(stream); 
+        
+        //when a remote user adds stream to the peer connection, we display it 
+        yourConn.onaddstream = function (e) { 
+            remoteVideo.srcObject = (e.stream); 
+        };
+        
+        // Setup ice handling 
+        yourConn.onicecandidate = function (event) { 
+            if (event.candidate) { 
+                send({ 
+                    type: "candidate", 
+                    candidate: event.candidate 
+                }); 
+            } 
+        };  
+        
+    }, function (error) { 
+        console.log(error); 
+    });
+    /////////////////////////////////////////////////
     showPlayers();
 });
 
@@ -238,7 +283,7 @@ voiceChat.addEventListener('click',e => {
     stream.getAudioTracks()[0].enabled = true;
 });
 
-function showPlayers()
+function showPlayers()      // called for mutiplayer mode only
 {
     var PLAYER_LIST;
     socket.on('onlinePlayers',function(data){
@@ -266,7 +311,8 @@ function showPlayers()
                     otherPlayer.game_type = "multiplayer";
                     otherPlayer.status = 1;
                     player2Name.innerHTML = otherPlayer.name;
-                    selectPlayer.style.display = 'none';                
+                    disable();
+                    mainPage.style.display = "block";             
                     game.style.display = "block";
                     init();
                     //////////////////////////////////
@@ -303,7 +349,8 @@ socket.on('incommingConnection',function(data){
         otherPlayer.game_type = "multiplayer";
         otherPlayer.status = 1;
         player2Name.innerHTML = otherPlayer.name;  
-        selectPlayer.style.display = 'none';                
+        disable();
+        mainPage.style.display = "block";             
         game.style.display = "block";
         init();      
         var gameObject = {
@@ -422,26 +469,25 @@ socket.on('data_receive',function(data){
         otherPlayer.bulletX = data.value.bulletX; 
         otherPlayer.bulletY = data.value.bulletY; 
         otherPlayer.score = data.value.score; 
-        otherPlayer.moves = data.value.moves;   
-        
-        // if(otherPlayer.state == 0){ // if other is freeze
-        //     player.state = 1; // then I will fire
-        //     console.log("State changed to fire");
-        // }
+        otherPlayer.moves = data.value.moves;
     }
     else if(data.type === "swap"){
         if(player.state == 1)
-            player.state = 0;
+        player.state = 0;
         else
-            player.state = 1;
+        player.state = 1;
     }
     else if(data.type === "terrainDestroyed"){
         terrain = data.terrain;
         player.tankY = data.playerY;
         draw_terrain();
     }
+    else if(data.type === "gameOver"){
+        console.log("Game Over Transferred");
+        storeScore();
+    }
     else
-        console.log(data.value);
+    console.log(data.value);
 })
 
 setInterval(function(){
@@ -450,14 +496,12 @@ setInterval(function(){
         "value": player
     };
     if(otherPlayer.id != undefined)
-        send_obj(obj);
+    send_obj(obj);
 },30);
 
 // Function used to generate the terrain randomly
 function generate_terrain()
 {
-    // var lineShape = new createjs.Shape();
-    
     //Initializing the features of the terrain
     var STEP_MAX = 2.0;
     var STEP_CHANGE = .5;
@@ -485,11 +529,55 @@ function generate_terrain()
             height = 105;
             slope *= -1;
         }
-        // console.log("x"+x);
-        // console.log("terrain[x]"+height)
-        // lineShape.graphics.beginLinearGradientFill(["#794c13","green"],[0.8,0.9],x,HEIGHT_MAX,x,height );
-        // lineShape.graphics.setStrokeStyle(10).beginLinearGradientStroke(["#794c13","green"],[0.7,0.9],x,HEIGHT_MAX,x,height).moveTo(x,HEIGHT_MAX).lineTo(x,height);
         terrain.push(height);
-        // stage.addChild(lineShape);
     }
+}
+
+function gameOver(){
+    console.log("Game Over");
+    var obj = {
+        "type": "gameOver",
+    }
+    send_obj(obj);
+    storeScore();
+}
+/******************************************************************************/
+/*****************Multi Player Mode End **************************************/
+function storeScore(){
+    disable();
+    mainPage.style.display = 'block';
+    gameover.style.display = 'block';
+    
+    var wonCount, lostCount, totalCount;
+    firebase.database().ref('users/' + player.id).once('value').then(function(snapshot) {
+        wonCount = snapshot.val().gameWon;
+        lostCount = snapshot.val().gameLost;
+        totalCount = snapshot.val().total;
+        console.log("total games played are "+totalCount);
+        
+        
+        if(player.score > otherPlayer.score)
+        {
+            gameOverResult.innerHTML = "AND THE WINNNER IS " + player.name; 
+            wonCount += 1;  
+            totalCount += 1;     
+        }
+        else if(player.score < otherPlayer.score)
+        {
+            gameOverResult.innerHTML = "AND THE WINNNER IS " + otherPlayer.name;
+            lostCount += 1;
+            totalCount += 1;             
+        }
+        else
+        {
+            gameOverResult.innerHTML = "This was a Draw Game";
+            totalCount += 1; 
+        }
+        var obj = {
+            "total": totalCount,
+            "gameWon": wonCount,
+            "gameLost": lostCount
+        }
+        firebase.database().ref().child('users/' + player.id).set(obj);
+    });
 }

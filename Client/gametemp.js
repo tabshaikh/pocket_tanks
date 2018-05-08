@@ -259,8 +259,6 @@ function movetank1forward(event) {
             send_obj(obj);
             //////////////////////////////////
             //console.log(player.state);
-            player.round = player.round + 1;
-            document.getElementById("roundno").innerHTML ="Round: "+ player.round;
             weapon.graphics.beginFill("red");
             weapon.graphics.drawCircle(0,0,10);
             weapon.x = player.tankX;
@@ -280,15 +278,18 @@ function movetank1forward(event) {
             weapon.graphics.endFill();
             xi = player.tankX;
             yi = player.tankY;
+            player.round = player.round + 1;
+            document.getElementById("roundno").innerHTML ="Round: "+ player.round;
             stage.addChild(weapon);
             stage.update();
             t=0;
             createjs.Ticker.addEventListener("tick", fireweapon);
             createjs.Ticker.setFPS(60);
+            
         }
-        else if(round >= 10)
+        else if(otherPlayer.round >= 10)
         {
-            player.state = 0;
+                gameOver();
         }
     }
     

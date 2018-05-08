@@ -56,39 +56,6 @@
 .form .register-form {
   display: none;
 }
-/* .container {
-  position: relative;
-  z-index: 1;
-  max-width: 300px;
-  margin: 0 auto;
-}
-.container:before, .container:after {
-  content: "";
-  display: block;
-  clear: both;
-}
-.container .info {
-  margin: 50px auto;
-  text-align: center;
-}
-.container .info h1 {
-  margin: 0 0 15px;
-  padding: 0;
-  font-size: 36px;
-  font-weight: 300;
-  color: #1a1a1a;
-}
-.container .info span {
-  color: #4d4d4d;
-  font-size: 12px;
-}
-.container .info span a {
-  color: #000000;
-  text-decoration: none;
-}
-.container .info span .fa {
-  color: #EF3B3A;
-} */
 .options {
   width: 460px;
   padding: 15% 0 0;
@@ -140,6 +107,20 @@
   cursor: pointer;
   border-radius: 5px;
 }
+#statistics{
+  font-family: "Roboto", sans-serif;
+  background: #607D8B;
+  width: 10%;
+  margin-left: -21%;
+  box-shadow: 0px 0px 3px 3px #333333 ;  
+  padding: 20px;
+  position: absolute;
+  top: .5%;
+  color: #FFFFFF;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+ }
 .game {
   position: relative;
   display: inline-block;
@@ -408,3 +389,10 @@ body,html {
   width: 344px;
   margin-left: 1525px;
 }
+ .headings{
+  color: #4CAF50;
+  font-size: 40px;
+  margin-top: 300px;
+  margin-left: 40px;
+  text-align: center;
+ }
