@@ -291,7 +291,7 @@ socket.on('incommingConnection',function(data){
     if(confirm(data.data.name + ' wants to play a game with you?'))
     {
         terrain = data.terrain;
-        console.log(terrain);
+        // console.log(terrain);
         player.control = 1; //client
         player.state = 0;
         otherPlayer = data.data;
@@ -321,7 +321,7 @@ socket.on('incommingConnection',function(data){
 /////////////////////////////////////////////////////////////////
 //when we got a message from a signaling server 
 socket.on("message", function (msg) { 
-    console.log("Got message", msg);
+    // console.log("Got message", msg);
     
     var data = JSON.parse(msg); 
     
@@ -435,6 +435,11 @@ socket.on('data_receive',function(data){
         else
             player.state = 1;
     }
+    else if(data.type === "terrainDestroyed"){
+        terrain = data.terrain;
+        player.tankY = data.playerY;
+        draw_terrain();
+    }
     else
         console.log(data.value);
 })
@@ -445,7 +450,7 @@ setInterval(function(){
         "value": player
     };
     if(otherPlayer.id != undefined)
-    send_obj(obj);
+        send_obj(obj);
 },30);
 
 // Function used to generate the terrain randomly

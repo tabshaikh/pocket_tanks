@@ -59,7 +59,7 @@ var rand=Math.floor(Math.random()*(canvas.width/2)); //variable to randomly posi
 var rand1=Math.floor(Math.random()*(canvas.width/2)+canvas.width/2); //variable to randomly position tank 2 on the terrain
 
 function init(){
-    console.log("init called");
+    //console.log("init called");
     draw_terrain();
     document.getElementById("p2score").innerHTML ="Player 2: " + otherPlayer.score;
     if(player.control == 0) //draw a player to the left 
@@ -110,6 +110,7 @@ function update_tank2_bullet(){
     }
     else{
         stage.removeChild(tank2_bullet);
+        stage.update();
     }
 }
 
@@ -170,6 +171,7 @@ function draw_tank2(){
     var tank2 = new Image();
     tank2.src = "./Client/img/tankVehicleleft.png";
     tank2.onload = handletankLoad2;
+    // console.log("tank 2 drawn" + otherPlayer.tankY);    
 }
 
 var image4, bitmap4;
@@ -256,7 +258,7 @@ function movetank1forward(event) {
             if(otherPlayer.id != undefined)
             send_obj(obj);
             //////////////////////////////////
-            console.log(player.state);
+            //console.log(player.state);
             player.round = player.round + 1;
             document.getElementById("roundno").innerHTML ="Round: "+ player.round;
             weapon.graphics.beginFill("red");
@@ -323,30 +325,43 @@ function movetank1forward(event) {
     var ran=0;
 
     function regenerate_terrain(){    
-            ran+=10;
+            ran+=55;
+            //console.log(weapon.x);
             for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
             {
                 var y_cord;
                 y_cord=Math.sqrt((ran*ran)-((i-weapon.x)*(i-weapon.x)));
-                y_cord=(terrain[i])+y_cord;
-                if(terrain[i]<=y_cord)
-                terrain[i]=y_cord;
+                y_cord=Math.ceil((terrain[Math.ceil(i)])+y_cord);
+                if(y_cord <= canvas.height)
+                terrain[Math.ceil(i)]=y_cord;
             }
             stage.removeChild(lineShape);
             draw_terrain(); 
-            player.y = terrain[player.x]; 
-            //add tanks and turrets once again.
+            player.tankY = terrain[player.tankX]; 
+            otherPlayer.tankY = terrain[otherPlayer.tankX];
+            // console.log("tank 2 y changed"+ otherPlayer.tankY);
+            /////////////////////////////////////////// 
+            var obj = {
+                "type":"terrainDestroyed",
+                "terrain": terrain,
+                "playerY": otherPlayer.tankY
+            }
+            send_obj(obj);
+            //////////////////////////////////////
+            draw_tank1();
+            draw_weapon_tank1();
             if(ran>=50)
-            {
-                ran=0;
+            {                
                 createjs.Ticker.removeEventListener("tick", regenerate_terrain);
+                ran=0;
             }
             stage.update(event);
+            stage.removeChild(weapon);
     }
 
     function update_score(){
-        console.log("otherPlayer.tankX: "+otherPlayer.tankX);
-        console.log("weapon.x: "+weapon.x);
+        //console.log("otherPlayer.tankX: "+otherPlayer.tankX);
+        //console.log("weapon.x: "+weapon.x);
         if(otherPlayer.tankX - 37 < weapon.x && weapon.x < otherPlayer.tankX + 37 )
         {
             player.score = player.score + 30;
@@ -356,11 +371,12 @@ function movetank1forward(event) {
        
     function draw_terrain(){
         //stage.removeAllChildren();
+        stage.removeChild(lineShape);
         lineShape = new createjs.Shape();
-        console.log("canvas width: "+canvas.width);
+        //console.log("canvas width: "+canvas.width);
         for (var x = 0; x < canvas.width; x++) 
         {
-            console.log("terrain: "+terrain[Math.ceil(weapon.x)]);
+            //console.log("terrain: "+terrain[Math.ceil(weapon.x)]);
             var HEIGHT_MAX = canvas.height ;
             lineShape.graphics.beginLinearGradientFill(["#794c13","green"],[0.8,0.9],x,HEIGHT_MAX,x,terrain[x]);
             lineShape.graphics.setStrokeStyle(10).beginLinearGradientStroke(["#794c13","green"],[0.7,0.9],x,HEIGHT_MAX,x,terrain[x]).moveTo(x,HEIGHT_MAX).lineTo(x,terrain[x]);
