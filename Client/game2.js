@@ -24,7 +24,7 @@ document.getElementById("roundno").innerHTML ="Round: "+player.round;
 var rand=Math.floor(Math.random()*(canvas.width/2)); //variable to randomly position tank 1 on the terrain
 var rand1=Math.floor(Math.random()*(canvas.width/2)+canvas.width/2); //variable to randomly position tank 2 on the terrain
 
-function init2(){
+function init2(){ // this function is called when user choose a single player game
     
     player.control  = 0;
     player.state  = 1;
@@ -54,8 +54,8 @@ function init2(){
     otherPlayer.tankY = terrain[rand1] ; 
     otherPlayer.angle = 120;
     
-    console.log("otherPlayer angle is "+otherPlayer.angle);
-
+    // console.log("otherPlayer angle is "+otherPlayer.angle);
+    
     draw_tank11();
     draw_weapon_tank11();
     draw_tank21();
@@ -65,7 +65,7 @@ function init2(){
     //createjs.Ticker.setFPS(60);
 }
 
-function update_other_player_info1(){
+function update_other_player_info1(){   // this function update other palyer info 
     draw_tank11();
     draw_weapon_tank11();
     draw_tank21();
@@ -230,7 +230,7 @@ function movetank1forward1(event) {
     var t;
     var weapon1 = new createjs.Shape();
     function fire1(){
-        console.log("FIRE : "); 
+        // console.log("FIRE : "); 
         if(player.state == 1 && player.round < 10)
         {
             player.round = player.round + 1;
@@ -278,7 +278,7 @@ function movetank1forward1(event) {
         }
     }
     
-    function fireweapon_person(event){
+    function fireweapon_person(event){  // used to fire weapons by person
         if(weapon.y <= terrain[Math.ceil(weapon.x)])
         {   
             t+=0.5;
@@ -286,21 +286,21 @@ function movetank1forward1(event) {
             weapon.y = yi - (player.power * (Math.sin(Math.PI*(player.angle)/180)) * t) + (4.9 * Math.pow(t,2));
             player.bulletX = weapon.x;
             player.bulletY = weapon.y;
-            console.log("firing");
+            // console.log("firing");
         }
         else
         {
             createjs.Ticker.removeEventListener("tick", fireweapon_person);
             stage.removeChild(weapon);
             remove_terrain1();
-            console.log("IN HERE "+player.state);
+            // console.log("IN HERE "+player.state);
             update_score1();      
         }
         stage.update(event);
     }
     
-    function fireweapon_computer(event){
-        console.log("In computer area");
+    function fireweapon_computer(event){    // used to fire weapons by computer
+        // console.log("In computer area");
         if(weapon1.y <= terrain[Math.ceil(weapon1.x)])
         {      
             t+=0.5;
@@ -319,16 +319,16 @@ function movetank1forward1(event) {
         stage.update(event);
     }
     
-    function remove_terrain1(){
-        console.log("In remove terrain");
+    function remove_terrain1(){     // this function removes previously drawn terrain 
+        // console.log("In remove terrain");
         createjs.Ticker.addEventListener("tick", regenerate_terrain1);
         createjs.Ticker.setFPS(60);
     }
     
     var ran=0;
     
-    function regenerate_terrain1(){    
-        console.log("In remove terrain");
+    function regenerate_terrain1(){    // this function is used to regenerated terrain
+        // console.log("In remove terrain");
         ran+=55;
         for(var i=weapon.x-ran;i<=weapon.x+ran;i++)
         {
@@ -354,15 +354,15 @@ function movetank1forward1(event) {
         stage.update(event);
         stage.removeChild(weapon);
     }
-
+    
     function remove_terrain2(){
-        console.log("In remove terrain");
+        // console.log("In remove terrain");
         createjs.Ticker.addEventListener("tick", regenerate_terrain2);
         createjs.Ticker.setFPS(60);
     }
-
+    
     function regenerate_terrain2(){    
-        console.log("In remove terrain");
+        // console.log("In remove terrain");
         ran+=55;
         for(var i=weapon1.x-ran;i<=weapon1.x+ran;i++)
         {
@@ -389,22 +389,22 @@ function movetank1forward1(event) {
         stage.removeChild(weapon1);
     }
     
-    function update_score1(){
+    function update_score1(){   // used to update score
         if(player.state == 1)
         {
-            console.log("Updating state of player");
+            // console.log("Updating state of player");
             player.state = 0;
             otherPlayer.state = 1;
             fire1();
-        if(otherPlayer.tankX - 37 < weapon.x && weapon.x < otherPlayer.tankX + 37 )
-        {
-            player.score = player.score + 30;
-            document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
-        }
+            if(otherPlayer.tankX - 37 < weapon.x && weapon.x < otherPlayer.tankX + 37 )
+            {
+                player.score = player.score + 30;
+                document.getElementById("p1score").innerHTML ="Player 1: " + player.score;
+            }
         }
         else
         {
-            console.log("Updating state of computing");
+            // console.log("Updating state of computing");
             player.state = 1;
             otherPlayer.state = 0;
             if(player.tankX - 37 < weapon1.x && weapon1.x < player.tankX + 37 )
@@ -465,27 +465,26 @@ function movetank1forward1(event) {
         function decrease_angle1(){
             if(player.state === 1)
             {
-                    fireangle = fireangle -1;
-                    player.angle = player.angle - 1;
-                    draw_weapon_tank11();
+                fireangle = fireangle -1;
+                player.angle = player.angle - 1;
+                draw_weapon_tank11();
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
         }
         function increase_angle1(){
             if(player.state === 1)
             {
-                    fireangle = fireangle + 1;
-                    player.angle = player.angle + 1;
-                    draw_weapon_tank11();
-                }
-                document.getElementById("fireangle").innerHTML =fireangle;
+                fireangle = fireangle + 1;
+                player.angle = player.angle + 1;
+                draw_weapon_tank11();
+            }
+            document.getElementById("fireangle").innerHTML =fireangle;
         }
         
         function api(){
             var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
             var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);
-            var range = Math.pow(tanks[1].bullet_speed,2) * Math.sin(2 * tanks[1].bullet_angle * Math.PI / 180) / 9.8;
-            
+            var range = Math.pow(tanks[1].bullet_speed,2) * Math.sin(2 * tanks[1].bullet_angle * Math.PI / 180) / 9.8;            
         }
         
         
