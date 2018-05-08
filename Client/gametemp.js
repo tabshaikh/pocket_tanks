@@ -298,7 +298,8 @@ function movetank1forward(event) {
             orignalterrainy = weapon.y;
             change = 1;
             createjs.Ticker.removeEventListener("tick", fireweapon);
-            stage.removeChild(weapon);      
+            stage.removeChild(weapon);
+            update_score();      
         }
         stage.update(event);
     }
@@ -437,6 +438,13 @@ function movetank1forward(event) {
                 }
                 document.getElementById("fireangle").innerHTML =fireangle;
             }
+        }
+
+        function api(){
+            var time =  (2 * tanks[1].bullet_speed * Math.	sin(tanks[1].bullet_angle * Math.PI / 180)) / 9.8;
+            var height = Math.pow(tanks[1].bullet_speed * Math.sin(tanks[1].bullet_angle * Math.PI / 180),2) / (2 * 9.8);
+            var range = Math.pow(tanks[1].bullet_speed,2) * Math.sin(2 * tanks[1].bullet_angle * Math.PI / 180) / 9.8;
+            
         }
         
         
